@@ -29,6 +29,9 @@
 #define OLED_CS    12
 #define OLED_RESET 13
 
+#define NOTE_ON   99
+#define NOTE_OFF  0
+
 using btnCallback = void (*)(Bounce& btn, int& pinVal, const int& midiChannel, const bool fall);
 
 class Ctrlr

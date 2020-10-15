@@ -103,76 +103,36 @@ void Ctrlr::update() {
   _btn7.update();
 
   btnOnEdge(_btn0, _pin0_val, _midiChannel, [](Bounce& btn, int& pinVal, const int& midiChannel, const bool fall) {
-    if (fall) {
-      pinVal = LOW;
-      usbMIDI.sendNoteOn(60, 99, midiChannel);  // 60 = C4
-    } else {
-      pinVal = HIGH;
-      usbMIDI.sendNoteOff(60, 0, midiChannel);  // 60 = C4
-    }
+    pinVal = fall ? LOW : HIGH;
+    usbMIDI.sendNoteOn(60, fall ? NOTE_ON : NOTE_OFF, midiChannel);  // 60 = C4
   });
   btnOnEdge(_btn1, _pin1_val, _midiChannel, [](Bounce& btn, int& pinVal, const int& midiChannel, const bool fall) {
-    if (fall) {
-      pinVal = LOW;
-      usbMIDI.sendNoteOn(61, 99, midiChannel);  // 61 = C#4
-    } else {
-      pinVal = HIGH;
-      usbMIDI.sendNoteOff(61, 0, midiChannel);  // 61 = C#4
-    }
+    pinVal = fall ? LOW : HIGH;
+    usbMIDI.sendNoteOn(61, fall ? NOTE_ON : NOTE_OFF, midiChannel);  // 61 = C#4
   });
   btnOnEdge(_btn2, _pin2_val, _midiChannel, [](Bounce& btn, int& pinVal, const int& midiChannel, const bool fall) {
-    if (fall) {
-      pinVal = LOW;
-      usbMIDI.sendNoteOn(62, 99, midiChannel);  // 62 = D4
-    } else {
-      pinVal = HIGH;
-      usbMIDI.sendNoteOff(62, 0, midiChannel);  // 62 = D4
-    }
+    pinVal = fall ? LOW : HIGH;
+    usbMIDI.sendNoteOn(62, fall ? NOTE_ON : NOTE_OFF, midiChannel);  // 62 = D4
   });
   btnOnEdge(_btn3, _pin3_val, _midiChannel, [](Bounce& btn, int& pinVal, const int& midiChannel, const bool fall) {
-    if (fall) {
-      pinVal = LOW;
-      usbMIDI.sendNoteOn(63, 99, midiChannel);  // 63 = D#4
-    } else {
-      pinVal = HIGH;
-      usbMIDI.sendNoteOff(63, 0, midiChannel);  // 63 = D#4
-    }
+    pinVal = fall ? LOW : HIGH;
+    usbMIDI.sendNoteOn(63, fall ? NOTE_ON : NOTE_OFF, midiChannel);  // 63 = D#4
   });
   btnOnEdge(_btn4, _pin4_val, _midiChannel, [](Bounce& btn, int& pinVal, const int& midiChannel, const bool fall) {
-    if (fall) {
-      pinVal = LOW;
-      usbMIDI.sendNoteOn(64, 99, midiChannel);  // 64 = E4
-    } else {
-      pinVal = HIGH;
-      usbMIDI.sendNoteOff(64, 0, midiChannel);  // 64 = E4
-    }
+    pinVal = fall ? LOW : HIGH;
+    usbMIDI.sendNoteOn(64, fall ? NOTE_ON : NOTE_OFF, midiChannel);  // 64 = E4
   });
   btnOnEdge(_btn5, _pin5_val, _midiChannel, [](Bounce& btn, int& pinVal, const int& midiChannel, const bool fall) {
-    if (fall) {
-      pinVal = LOW;
-      usbMIDI.sendNoteOn(65, 99, midiChannel);  // 65 = F4
-    } else {
-      pinVal = HIGH;
-      usbMIDI.sendNoteOff(65, 0, midiChannel);  // 65 = F4
-    }
+    pinVal = fall ? LOW : HIGH;
+    usbMIDI.sendNoteOn(65, fall ? NOTE_ON : NOTE_OFF, midiChannel);  // 65 = F4
   });
   btnOnEdge(_btn6, _pin6_val, _midiChannel, [](Bounce& btn, int& pinVal, const int& midiChannel, const bool fall) {
-    if (fall) {
-      pinVal = LOW;
-      usbMIDI.sendNoteOn(66, 99, midiChannel);  // 66 = F#4
-    } else {
-      pinVal = HIGH;
-      usbMIDI.sendNoteOff(66, 0, midiChannel);  // 66 = F#4
-    }
+    pinVal = fall ? LOW : HIGH;
+    usbMIDI.sendNoteOn(66, fall ? NOTE_ON : NOTE_OFF, midiChannel);  // 66 = F#4
   });
   btnOnEdge(_btn7, _pin7_val, _midiChannel, [](Bounce& btn, int& pinVal, const int& midiChannel, const bool fall) {
-    if (fall) {
-      pinVal = LOW;
-      usbMIDI.sendNoteOn(67, 99, midiChannel);  // 67 = G4
-    } else {
-      pinVal = HIGH;
-      usbMIDI.sendNoteOff(67, 0, midiChannel);  // 67 = G4
-    }
+    pinVal = fall ? LOW : HIGH;
+    usbMIDI.sendNoteOn(67, fall ? NOTE_ON : NOTE_OFF, midiChannel);  // 67 = G4
   });
 
   // http://forum.pjrc.com/threads/24179-Teensy-3-Ableton-Analog-CC-causes-midi-crash
