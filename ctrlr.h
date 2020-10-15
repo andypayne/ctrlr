@@ -29,6 +29,8 @@
 #define OLED_CS    12
 #define OLED_RESET 13
 
+using btnCallback = void (*)(Bounce& btn, int& pinVal, const int& midiChannel, const bool fall);
+
 class Ctrlr
 {
   public:
@@ -49,6 +51,7 @@ class Ctrlr
 
     void setup();
     void update();
+    void btnOnEdge(Bounce &btn, int& pinVal, const int& midiChannel, btnCallback cb);
 
   private:
     // the MIDI channel number to send messages
@@ -87,6 +90,7 @@ class Ctrlr
     Bounce _btn7;
     Encoder _renc;
     Adafruit_SSD1306 _display;
+
 };
 
 #endif
