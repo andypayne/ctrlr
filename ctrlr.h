@@ -29,8 +29,8 @@
 #define OLED_CS    12
 #define OLED_RESET 13
 
-#define NOTE_ON   99
-#define NOTE_OFF  0
+#define VEL_NOTE_ON   99
+#define VEL_NOTE_OFF  0
 
 using btnCallback = void (*)(Bounce& btn, int& pinVal, const int& midiChannel, const bool fall);
 
@@ -54,6 +54,8 @@ class Ctrlr
 
     void setup();
     void update();
+    void displayBootScreen();
+    void drawBootRect(const int x, const int y, const int delayMs);
     void btnOnEdge(Bounce &btn, int& pinVal, const int& midiChannel, btnCallback cb);
 
   private:

@@ -71,7 +71,7 @@ void Ctrlr::setup() {
   Serial.print(F("SSD1306_128_32 is defined"));
 #endif
 
-  delay(1000);
+  delay(500);
 
   // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
   if(!_display.begin(SSD1306_SWITCHCAPVCC)) {
@@ -81,6 +81,55 @@ void Ctrlr::setup() {
 
   _display.clearDisplay();
   _display.display();
+  displayBootScreen();
+}
+
+void Ctrlr::displayBootScreen() {
+  _display.clearDisplay();
+  for(int16_t i = _display.height() / 2 - 1; i >= 0; i -= 2) {
+    drawBootRect(i, i, 30);
+    _display.clearDisplay();
+  }
+  for(int16_t i = 0; i < _display.height() / 2; i += 2) {
+    drawBootRect(i, i, 30);
+    _display.clearDisplay();
+  }
+  for(int16_t i = _display.height() / 2 - 1; i >= 0; i -= 2) {
+    drawBootRect(i, i, 30);
+    _display.clearDisplay();
+  }
+  for(int16_t i = 0; i < _display.height() / 2; i += 2) {
+    drawBootRect(i, i, 30);
+    _display.clearDisplay();
+  }
+  for(int16_t i = _display.height() / 2 - 1; i >= 0; i -= 2) {
+    drawBootRect(i, i, 30);
+    if (i > 1) {
+      _display.clearDisplay();
+      _display.display();
+    }
+  }
+  _display.setTextSize(2);
+  _display.setTextColor(SSD1306_WHITE);
+  _display.setCursor(36, 9);
+  _display.cp437(true);
+  _display.println(F("CTRLR"));
+  _display.display();
+  delay(1200);
+  _display.clearDisplay();
+  for(int16_t i = 0; i < _display.height() / 2; i += 2) {
+    drawBootRect(i, i, 16);
+    _display.clearDisplay();
+  }
+  _display.clearDisplay();
+  _display.display();
+  delay(200);
+}
+
+void Ctrlr::drawBootRect(const int x, const int y, const int delayMs) {
+  _display.drawRect(x, y, _display.width() - 2 * x, _display.height() - 2 * y, SSD1306_WHITE);
+  _display.display();
+  delay(delayMs);
 }
 
 void Ctrlr::btnOnEdge(Bounce &btn, int& pinVal, const int& midiChannel, btnCallback cb) {
@@ -104,35 +153,35 @@ void Ctrlr::update() {
 
   btnOnEdge(_btn0, _pin0_val, _midiChannel, [](Bounce& btn, int& pinVal, const int& midiChannel, const bool fall) {
     pinVal = fall ? LOW : HIGH;
-    usbMIDI.sendNoteOn(60, fall ? NOTE_ON : NOTE_OFF, midiChannel);  // 60 = C4
+    usbMIDI.sendNoteOn(60, fall ? VEL_NOTE_ON : VEL_NOTE_OFF, midiChannel);  // 60 = C4
   });
   btnOnEdge(_btn1, _pin1_val, _midiChannel, [](Bounce& btn, int& pinVal, const int& midiChannel, const bool fall) {
     pinVal = fall ? LOW : HIGH;
-    usbMIDI.sendNoteOn(61, fall ? NOTE_ON : NOTE_OFF, midiChannel);  // 61 = C#4
+    usbMIDI.sendNoteOn(61, fall ? VEL_NOTE_ON : VEL_NOTE_OFF, midiChannel);  // 61 = C#4
   });
   btnOnEdge(_btn2, _pin2_val, _midiChannel, [](Bounce& btn, int& pinVal, const int& midiChannel, const bool fall) {
     pinVal = fall ? LOW : HIGH;
-    usbMIDI.sendNoteOn(62, fall ? NOTE_ON : NOTE_OFF, midiChannel);  // 62 = D4
+    usbMIDI.sendNoteOn(62, fall ? VEL_NOTE_ON : VEL_NOTE_OFF, midiChannel);  // 62 = D4
   });
   btnOnEdge(_btn3, _pin3_val, _midiChannel, [](Bounce& btn, int& pinVal, const int& midiChannel, const bool fall) {
     pinVal = fall ? LOW : HIGH;
-    usbMIDI.sendNoteOn(63, fall ? NOTE_ON : NOTE_OFF, midiChannel);  // 63 = D#4
+    usbMIDI.sendNoteOn(63, fall ? VEL_NOTE_ON : VEL_NOTE_OFF, midiChannel);  // 63 = D#4
   });
   btnOnEdge(_btn4, _pin4_val, _midiChannel, [](Bounce& btn, int& pinVal, const int& midiChannel, const bool fall) {
     pinVal = fall ? LOW : HIGH;
-    usbMIDI.sendNoteOn(64, fall ? NOTE_ON : NOTE_OFF, midiChannel);  // 64 = E4
+    usbMIDI.sendNoteOn(64, fall ? VEL_NOTE_ON : VEL_NOTE_OFF, midiChannel);  // 64 = E4
   });
   btnOnEdge(_btn5, _pin5_val, _midiChannel, [](Bounce& btn, int& pinVal, const int& midiChannel, const bool fall) {
     pinVal = fall ? LOW : HIGH;
-    usbMIDI.sendNoteOn(65, fall ? NOTE_ON : NOTE_OFF, midiChannel);  // 65 = F4
+    usbMIDI.sendNoteOn(65, fall ? VEL_NOTE_ON : VEL_NOTE_OFF, midiChannel);  // 65 = F4
   });
   btnOnEdge(_btn6, _pin6_val, _midiChannel, [](Bounce& btn, int& pinVal, const int& midiChannel, const bool fall) {
     pinVal = fall ? LOW : HIGH;
-    usbMIDI.sendNoteOn(66, fall ? NOTE_ON : NOTE_OFF, midiChannel);  // 66 = F#4
+    usbMIDI.sendNoteOn(66, fall ? VEL_NOTE_ON : VEL_NOTE_OFF, midiChannel);  // 66 = F#4
   });
   btnOnEdge(_btn7, _pin7_val, _midiChannel, [](Bounce& btn, int& pinVal, const int& midiChannel, const bool fall) {
     pinVal = fall ? LOW : HIGH;
-    usbMIDI.sendNoteOn(67, fall ? NOTE_ON : NOTE_OFF, midiChannel);  // 67 = G4
+    usbMIDI.sendNoteOn(67, fall ? VEL_NOTE_ON : VEL_NOTE_OFF, midiChannel);  // 67 = G4
   });
 
   // http://forum.pjrc.com/threads/24179-Teensy-3-Ableton-Analog-CC-causes-midi-crash
