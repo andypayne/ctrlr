@@ -79,15 +79,6 @@ class Ctrlr
     void displayButtonStatus(const int pinVal, const int btnX, const int btnY, const float btnSz, const float btnRad);
     void btnOnEdge(Bounce &btn, const btnBehavior& bb, int& pinVal, const int& midiChannel, btnCallback cb);
 
-    btnBehavior _bb0;
-    btnBehavior _bb1;
-    btnBehavior _bb2;
-    btnBehavior _bb3;
-    btnBehavior _bb4;
-    btnBehavior _bb5;
-    btnBehavior _bb6;
-    btnBehavior _bb7;
-
   private:
     // the MIDI channel number to send messages
     int _midiChannel;
@@ -125,9 +116,16 @@ class Ctrlr
     Bounce _btn5;
     Bounce _btn6;
     Bounce _btn7;
+    btnBehavior _bb0;
+    btnBehavior _bb1;
+    btnBehavior _bb2;
+    btnBehavior _bb3;
+    btnBehavior _bb4;
+    btnBehavior _bb5;
+    btnBehavior _bb6;
+    btnBehavior _bb7;
     Encoder _renc;
     Adafruit_SSD1306 _display;
-
 };
 
 #endif

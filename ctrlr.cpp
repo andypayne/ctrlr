@@ -13,6 +13,7 @@ Ctrlr::Ctrlr(
   int inRencSwitch,
   int inRencDT,
   int inRencCLK) :
+    _sw_millis(500),
     _btn0(in0Pin, 5),
     _btn1(in1Pin, 5),
     _btn2(in2Pin, 5),
@@ -21,8 +22,6 @@ Ctrlr::Ctrlr(
     _btn5(in5Pin, 5),
     _btn6(in6Pin, 5),
     _btn7(in7Pin, 5),
-    _renc(inRencDT, inRencCLK),
-    _sw_millis(500),
     _bb0({ defBtnMode, 60, 20, MIDI_HIGH }),
     _bb1({ defBtnMode, 61, 21, MIDI_HIGH }),
     _bb2({ defBtnMode, 62, 22, MIDI_HIGH }),
@@ -31,6 +30,7 @@ Ctrlr::Ctrlr(
     _bb5({ defBtnMode, 65, 25, MIDI_HIGH }),
     _bb6({ defBtnMode, 66, 26, MIDI_HIGH }),
     _bb7({ defBtnMode, 67, 27, MIDI_HIGH }),
+    _renc(inRencDT, inRencCLK),
     _display(
       SCREEN_WIDTH,
       SCREEN_HEIGHT,
@@ -226,7 +226,7 @@ void Ctrlr::update() {
     }
   });
 
-  if (_renc_sw_val == LOW && millis() - _renc_sw_time >= _sw_millis) {
+  if (_renc_sw_val == LOW && (long)(millis() - _renc_sw_time) >= _sw_millis) {
     _renc_sw_time = millis();
     _bb0.mode = (_bb0.mode == mnote) ? mcchg : mnote;
     _bb1.mode = (_bb1.mode == mnote) ? mcchg : mnote;
