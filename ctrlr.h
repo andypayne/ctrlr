@@ -44,6 +44,8 @@ class Ctrlr
       mcchg
     };
 
+    btnMode defBtnMode = mnote;
+
     struct btnBehavior {
       btnMode mode;
       int noteVal;
@@ -77,14 +79,14 @@ class Ctrlr
     void displayButtonStatus(const int pinVal, const int btnX, const int btnY, const float btnSz, const float btnRad);
     void btnOnEdge(Bounce &btn, const btnBehavior& bb, int& pinVal, const int& midiChannel, btnCallback cb);
 
-    btnBehavior _bb0 { mnote, 60, 20, MIDI_HIGH };
-    btnBehavior _bb1 { mnote, 61, 21, MIDI_HIGH };
-    btnBehavior _bb2 { mnote, 62, 22, MIDI_HIGH };
-    btnBehavior _bb3 { mnote, 63, 23, MIDI_HIGH };
-    btnBehavior _bb4 { mnote, 64, 24, MIDI_HIGH };
-    btnBehavior _bb5 { mnote, 65, 25, MIDI_HIGH };
-    btnBehavior _bb6 { mnote, 66, 26, MIDI_HIGH };
-    btnBehavior _bb7 { mnote, 67, 27, MIDI_HIGH };
+    btnBehavior _bb0;
+    btnBehavior _bb1;
+    btnBehavior _bb2;
+    btnBehavior _bb3;
+    btnBehavior _bb4;
+    btnBehavior _bb5;
+    btnBehavior _bb6;
+    btnBehavior _bb7;
 
   private:
     // the MIDI channel number to send messages

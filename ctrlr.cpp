@@ -23,6 +23,14 @@ Ctrlr::Ctrlr(
     _btn7(in7Pin, 5),
     _renc(inRencDT, inRencCLK),
     _sw_millis(500),
+    _bb0({ defBtnMode, 60, 20, MIDI_HIGH }),
+    _bb1({ defBtnMode, 61, 21, MIDI_HIGH }),
+    _bb2({ defBtnMode, 62, 22, MIDI_HIGH }),
+    _bb3({ defBtnMode, 63, 23, MIDI_HIGH }),
+    _bb4({ defBtnMode, 64, 24, MIDI_HIGH }),
+    _bb5({ defBtnMode, 65, 25, MIDI_HIGH }),
+    _bb6({ defBtnMode, 66, 26, MIDI_HIGH }),
+    _bb7({ defBtnMode, 67, 27, MIDI_HIGH }),
     _display(
       SCREEN_WIDTH,
       SCREEN_HEIGHT,
@@ -250,7 +258,7 @@ void Ctrlr::displayControllerView() {
   int marY = 4;
 
   // Buttons
-  float btnSz = 9;
+  float btnSz = 11;
   float btnRad = 2;
   float btn0X = marX;
   float btn0Y = marY;
@@ -264,9 +272,9 @@ void Ctrlr::displayControllerView() {
   displayButtonStatus(_pin7_val, 3 * (marX + btnSz) + btn0X, marY + btnSz + btn0Y, btnSz, btnRad);
 
   // Encoder
-  int encRad = 8;
+  int encRad = 10;
   //float rencX = _display.width() - encRad - marX - 24;
-  float rencX = 5 * (marX + btnSz) + encRad;
+  float rencX = 4.5 * (marX + btnSz) + encRad;
   float rencY = _display.height() / 2;
   if (_renc_sw_val == LOW) {
     _display.fillCircle(rencX, rencY, 0.5 * encRad, SSD1306_WHITE);
@@ -295,11 +303,11 @@ void Ctrlr::displayControllerView() {
 
   _display.setTextSize(1);
   _display.setTextColor(SSD1306_WHITE);
-  _display.setCursor(6 * (marX + btnSz) + encRad, _display.height() / 2 - 3);
-  _display.println(_renc_val);
+  _display.setCursor(5.55 * (marX + btnSz) + encRad, _display.height() / 2 - 3);
+  _display.print(_renc_val);
 
-  _display.setCursor(6 * (marX + btnSz) + encRad, _display.height() / 2 - 15);
-  _display.println(F(_bb0.mode == mnote ? "N" : "C"));
+  _display.setCursor(5.55 * (marX + btnSz) + encRad, _display.height() / 2 - 15);
+  _display.print(F(_bb0.mode == mnote ? "N" : "C"));
 
   _display.display();
 }
