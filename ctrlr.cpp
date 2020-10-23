@@ -184,9 +184,86 @@ void Ctrlr::update() {
     usbMIDI.sendNoteOn(67, fall ? VEL_NOTE_ON : VEL_NOTE_OFF, midiChannel);  // 67 = G4
   });
 
+  long new_renc_val = _renc.read();
+  if (new_renc_val != _renc_val) {
+    _renc_val = new_renc_val;
+    usbMIDI.sendPitchBend(_renc_val, _midiChannel);
+  }
+
   // http://forum.pjrc.com/threads/24179-Teensy-3-Ableton-Analog-CC-causes-midi-crash
   while (usbMIDI.read()) { }
 
+  displayControllerView();
+  //displayDebugView();
+}
+
+void Ctrlr::displayControllerView() {
+  _display.clearDisplay();
+
+  int marX = 6;
+  int marY = 4;
+
+  // Buttons
+  float btnSz = 9;
+  float btnRad = 2;
+  float btn0X = marX;
+  float btn0Y = marY;
+  displayButtonStatus(_pin0_val, btn0X, btn0Y, btnSz, btnRad);
+  displayButtonStatus(_pin1_val, 1 * (marX + btnSz) + btn0X, btn0Y, btnSz, btnRad);
+  displayButtonStatus(_pin2_val, 2 * (marX + btnSz) + btn0X, btn0Y, btnSz, btnRad);
+  displayButtonStatus(_pin3_val, 3 * (marX + btnSz) + btn0X, btn0Y, btnSz, btnRad);
+  displayButtonStatus(_pin4_val, btn0X, marY + btnSz + btn0Y, btnSz, btnRad);
+  displayButtonStatus(_pin5_val, 1 * (marX + btnSz) + btn0X, marY + btnSz + btn0Y, btnSz, btnRad);
+  displayButtonStatus(_pin6_val, 2 * (marX + btnSz) + btn0X, marY + btnSz + btn0Y, btnSz, btnRad);
+  displayButtonStatus(_pin7_val, 3 * (marX + btnSz) + btn0X, marY + btnSz + btn0Y, btnSz, btnRad);
+
+  // Encoder
+  int encRad = 8;
+  //float rencX = _display.width() - encRad - marX - 24;
+  float rencX = 5 * (marX + btnSz) + encRad;
+  float rencY = _display.height() / 2;
+  if (_renc_sw_val == LOW) {
+    _display.fillCircle(rencX, rencY, 0.5 * encRad, SSD1306_WHITE);
+  } else {
+    _display.drawCircle(rencX, rencY, 0.5 * encRad, SSD1306_WHITE);
+  }
+
+  float indX = encRad * cos(2 * PI * _renc_val / 80.0 - PI / 2);
+  float indY = encRad * sin(2 * PI * _renc_val / 80.0 - PI / 2);
+
+  float ind1X = 0.9 * indX + rencX;
+  float ind1Y = 0.9 * indY + rencY;
+  _display.drawPixel(ind1X, ind1Y, SSD1306_WHITE);
+  float ind2X = 1.0 * indX + rencX;
+  float ind2Y = 1.0 * indY + rencY;
+  _display.drawPixel(ind2X, ind2Y, SSD1306_WHITE);
+  float ind3X = 1.1 * indX + rencX;
+  float ind3Y = 1.1 * indY + rencY;
+  _display.drawPixel(ind3X, ind3Y, SSD1306_WHITE);
+  float ind4X = 1.2 * indX + rencX;
+  float ind4Y = 1.2 * indY + rencY;
+  _display.drawPixel(ind4X, ind4Y, SSD1306_WHITE);
+  float ind5X = 1.3 * indX + rencX;
+  float ind5Y = 1.3 * indY + rencY;
+  _display.drawPixel(ind5X, ind5Y, SSD1306_WHITE);
+
+  _display.setTextSize(1);
+  _display.setTextColor(SSD1306_WHITE);
+  _display.setCursor(6 * (marX + btnSz) + encRad, _display.height() / 2 - 3);
+  _display.println(_renc_val);
+
+  _display.display();
+}
+
+void Ctrlr::displayButtonStatus(const int pinVal, const int btnX, const int btnY, const float btnSz, const float btnRad) {
+  if (pinVal == LOW) {
+    _display.fillRoundRect(btnX, btnY, btnSz, btnSz, btnRad, SSD1306_WHITE);
+  } else {
+    _display.drawRoundRect(btnX, btnY, btnSz, btnSz, btnRad, SSD1306_WHITE);
+  }
+}
+
+void Ctrlr::displayDebugView() {
   _display.clearDisplay();
   _display.setTextSize(2);
   _display.setTextColor(SSD1306_WHITE);
@@ -201,12 +278,6 @@ void Ctrlr::update() {
   _display.print(F(_pin6_val == LOW ? "*" : "o"));
   _display.print(F(_pin7_val == LOW ? "*" : "o"));
   _display.println(F(_renc_sw_val == LOW ? "*" : "o"));
-
-  long new_renc_val = _renc.read();
-  if (new_renc_val != _renc_val) {
-    _renc_val = new_renc_val;
-    usbMIDI.sendPitchBend(_renc_val, _midiChannel);
-  }
 
   _display.print(F("RENC "));
   _display.println(_renc_val);
