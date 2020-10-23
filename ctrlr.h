@@ -32,11 +32,27 @@
 #define VEL_NOTE_ON   99
 #define VEL_NOTE_OFF  0
 
-using btnCallback = void (*)(Bounce& btn, int& pinVal, const int& midiChannel, const bool fall);
+#define MIDI_HIGH 127
+#define MIDI_LOW 0
+
 
 class Ctrlr
 {
   public:
+    enum btnMode {
+      mnote,
+      mcchg
+    };
+
+    struct btnBehavior {
+      btnMode mode;
+      int noteVal;
+      int ctlNum;
+      int ctlVal;
+    };
+
+    using btnCallback = void (*)(Bounce& btn, const btnBehavior& bb, int& pinVal, const int& midiChannel, const bool fall);
+
     Ctrlr(
       int midiChannel,
       int in0Pin,
@@ -59,7 +75,16 @@ class Ctrlr
     void displayDebugView();
     void displayControllerView();
     void displayButtonStatus(const int pinVal, const int btnX, const int btnY, const float btnSz, const float btnRad);
-    void btnOnEdge(Bounce &btn, int& pinVal, const int& midiChannel, btnCallback cb);
+    void btnOnEdge(Bounce &btn, const btnBehavior& bb, int& pinVal, const int& midiChannel, btnCallback cb);
+
+    btnBehavior _bb0 { mnote, 60, 20, MIDI_HIGH };
+    btnBehavior _bb1 { mnote, 61, 21, MIDI_HIGH };
+    btnBehavior _bb2 { mnote, 62, 22, MIDI_HIGH };
+    btnBehavior _bb3 { mnote, 63, 23, MIDI_HIGH };
+    btnBehavior _bb4 { mnote, 64, 24, MIDI_HIGH };
+    btnBehavior _bb5 { mnote, 65, 25, MIDI_HIGH };
+    btnBehavior _bb6 { mnote, 66, 26, MIDI_HIGH };
+    btnBehavior _bb7 { mnote, 67, 27, MIDI_HIGH };
 
   private:
     // the MIDI channel number to send messages
@@ -87,6 +112,8 @@ class Ctrlr
     int _pin7_val;
     int _renc_sw_val;
     long _renc_val;
+    long _renc_sw_time;
+    long _sw_millis;
 
     Bounce _btn0;
     Bounce _btn1;
