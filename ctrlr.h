@@ -51,6 +51,7 @@ class Ctrlr
       int noteVal;
       int ctlNum;
       int ctlVal;
+      bool midiLowOnRelease;
     };
 
     using btnCallback = void (*)(Bounce& btn, const btnBehavior& bb, int& pinVal, const int& midiChannel, const bool fall);
