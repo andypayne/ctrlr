@@ -276,6 +276,7 @@ void Ctrlr::update() {
     _bb5.mode = (_bb5.mode == mnote) ? mcchg : (_bb5.mode == mcchg) ? mcchg2 : mnote;
     _bb6.mode = (_bb6.mode == mnote) ? mcchg : (_bb6.mode == mcchg) ? mcchg2 : mnote;
     _bb7.mode = (_bb7.mode == mnote) ? mcchg : (_bb7.mode == mcchg) ? mcchg2 : mnote;
+    usbMIDI.sendControlChange(MODE_CHG_CTL_NUM, _bb0.mode, _midiChannel);
   }
 
   long new_renc_val = _renc.read();

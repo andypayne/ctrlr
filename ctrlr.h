@@ -33,8 +33,9 @@
 #define VEL_NOTE_OFF  0
 
 #define MIDI_HIGH 127
-#define MIDI_LOW 0
+#define MIDI_LOW    0
 
+#define MODE_CHG_CTL_NUM  28
 
 class Ctrlr
 {
