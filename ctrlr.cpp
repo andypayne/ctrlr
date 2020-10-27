@@ -22,14 +22,14 @@ Ctrlr::Ctrlr(
     _btn5(in5Pin, 5),
     _btn6(in6Pin, 5),
     _btn7(in7Pin, 5),
-    _bb0({ defBtnMode, 60, 20, MIDI_HIGH, false }),
-    _bb1({ defBtnMode, 61, 21, MIDI_HIGH, false }),
-    _bb2({ defBtnMode, 62, 22, MIDI_HIGH, false }),
-    _bb3({ defBtnMode, 63, 23, MIDI_HIGH, false }),
-    _bb4({ defBtnMode, 64, 24, MIDI_HIGH, false }),
-    _bb5({ defBtnMode, 65, 25, MIDI_HIGH, false }),
-    _bb6({ defBtnMode, 66, 26, MIDI_HIGH, false }),
-    _bb7({ defBtnMode, 67, 27, MIDI_HIGH, false }),
+    _bb0({ defBtnMode, 60, 20, MIDI_HIGH }),
+    _bb1({ defBtnMode, 61, 21, MIDI_HIGH }),
+    _bb2({ defBtnMode, 62, 22, MIDI_HIGH }),
+    _bb3({ defBtnMode, 63, 23, MIDI_HIGH }),
+    _bb4({ defBtnMode, 64, 24, MIDI_HIGH }),
+    _bb5({ defBtnMode, 65, 25, MIDI_HIGH }),
+    _bb6({ defBtnMode, 66, 26, MIDI_HIGH }),
+    _bb7({ defBtnMode, 67, 27, MIDI_HIGH }),
     _renc(inRencDT, inRencCLK),
     _display(
       SCREEN_WIDTH,
@@ -168,9 +168,10 @@ void Ctrlr::update() {
     } else if (bb.mode == mcchg) {
       if (fall) {
         usbMIDI.sendControlChange(bb.ctlNum, bb.ctlVal, midiChannel);
-      } else if (bb.midiLowOnRelease) {
-        usbMIDI.sendControlChange(bb.ctlNum, MIDI_LOW, midiChannel);
       }
+    } else if (bb.mode == mcchg2) {
+      int ctlVal = fall ? bb.ctlVal : MIDI_LOW;
+      usbMIDI.sendControlChange(bb.ctlNum, ctlVal, midiChannel);
     }
   });
   btnOnEdge(_btn1, _bb1, _pin1_val, _midiChannel, [](Bounce& btn, const btnBehavior& bb, int& pinVal, const int& midiChannel, const bool fall) {
@@ -180,9 +181,10 @@ void Ctrlr::update() {
     } else if (bb.mode == mcchg) {
       if (fall) {
         usbMIDI.sendControlChange(bb.ctlNum, bb.ctlVal, midiChannel);
-      } else if (bb.midiLowOnRelease) {
-        usbMIDI.sendControlChange(bb.ctlNum, MIDI_LOW, midiChannel);
       }
+    } else if (bb.mode == mcchg2) {
+      int ctlVal = fall ? bb.ctlVal : MIDI_LOW;
+      usbMIDI.sendControlChange(bb.ctlNum, ctlVal, midiChannel);
     }
   });
   btnOnEdge(_btn2, _bb2, _pin2_val, _midiChannel, [](Bounce& btn, const btnBehavior& bb, int& pinVal, const int& midiChannel, const bool fall) {
@@ -192,9 +194,10 @@ void Ctrlr::update() {
     } else if (bb.mode == mcchg) {
       if (fall) {
         usbMIDI.sendControlChange(bb.ctlNum, bb.ctlVal, midiChannel);
-      } else if (bb.midiLowOnRelease) {
-        usbMIDI.sendControlChange(bb.ctlNum, MIDI_LOW, midiChannel);
       }
+    } else if (bb.mode == mcchg2) {
+      int ctlVal = fall ? bb.ctlVal : MIDI_LOW;
+      usbMIDI.sendControlChange(bb.ctlNum, ctlVal, midiChannel);
     }
   });
   btnOnEdge(_btn3, _bb3, _pin3_val, _midiChannel, [](Bounce& btn, const btnBehavior& bb, int& pinVal, const int& midiChannel, const bool fall) {
@@ -204,9 +207,10 @@ void Ctrlr::update() {
     } else if (bb.mode == mcchg) {
       if (fall) {
         usbMIDI.sendControlChange(bb.ctlNum, bb.ctlVal, midiChannel);
-      } else if (bb.midiLowOnRelease) {
-        usbMIDI.sendControlChange(bb.ctlNum, MIDI_LOW, midiChannel);
       }
+    } else if (bb.mode == mcchg2) {
+      int ctlVal = fall ? bb.ctlVal : MIDI_LOW;
+      usbMIDI.sendControlChange(bb.ctlNum, ctlVal, midiChannel);
     }
   });
   btnOnEdge(_btn4, _bb4, _pin4_val, _midiChannel, [](Bounce& btn, const btnBehavior& bb, int& pinVal, const int& midiChannel, const bool fall) {
@@ -216,9 +220,10 @@ void Ctrlr::update() {
     } else if (bb.mode == mcchg) {
       if (fall) {
         usbMIDI.sendControlChange(bb.ctlNum, bb.ctlVal, midiChannel);
-      } else if (bb.midiLowOnRelease) {
-        usbMIDI.sendControlChange(bb.ctlNum, MIDI_LOW, midiChannel);
       }
+    } else if (bb.mode == mcchg2) {
+      int ctlVal = fall ? bb.ctlVal : MIDI_LOW;
+      usbMIDI.sendControlChange(bb.ctlNum, ctlVal, midiChannel);
     }
   });
   btnOnEdge(_btn5, _bb5, _pin5_val, _midiChannel, [](Bounce& btn, const btnBehavior& bb, int& pinVal, const int& midiChannel, const bool fall) {
@@ -228,9 +233,10 @@ void Ctrlr::update() {
     } else if (bb.mode == mcchg) {
       if (fall) {
         usbMIDI.sendControlChange(bb.ctlNum, bb.ctlVal, midiChannel);
-      } else if (bb.midiLowOnRelease) {
-        usbMIDI.sendControlChange(bb.ctlNum, MIDI_LOW, midiChannel);
       }
+    } else if (bb.mode == mcchg2) {
+      int ctlVal = fall ? bb.ctlVal : MIDI_LOW;
+      usbMIDI.sendControlChange(bb.ctlNum, ctlVal, midiChannel);
     }
   });
   btnOnEdge(_btn6, _bb6, _pin6_val, _midiChannel, [](Bounce& btn, const btnBehavior& bb, int& pinVal, const int& midiChannel, const bool fall) {
@@ -240,9 +246,10 @@ void Ctrlr::update() {
     } else if (bb.mode == mcchg) {
       if (fall) {
         usbMIDI.sendControlChange(bb.ctlNum, bb.ctlVal, midiChannel);
-      } else if (bb.midiLowOnRelease) {
-        usbMIDI.sendControlChange(bb.ctlNum, MIDI_LOW, midiChannel);
       }
+    } else if (bb.mode == mcchg2) {
+      int ctlVal = fall ? bb.ctlVal : MIDI_LOW;
+      usbMIDI.sendControlChange(bb.ctlNum, ctlVal, midiChannel);
     }
   });
   btnOnEdge(_btn7, _bb7, _pin7_val, _midiChannel, [](Bounce& btn, const btnBehavior& bb, int& pinVal, const int& midiChannel, const bool fall) {
@@ -252,22 +259,23 @@ void Ctrlr::update() {
     } else if (bb.mode == mcchg) {
       if (fall) {
         usbMIDI.sendControlChange(bb.ctlNum, bb.ctlVal, midiChannel);
-      } else if (bb.midiLowOnRelease) {
-        usbMIDI.sendControlChange(bb.ctlNum, MIDI_LOW, midiChannel);
       }
+    } else if (bb.mode == mcchg2) {
+      int ctlVal = fall ? bb.ctlVal : MIDI_LOW;
+      usbMIDI.sendControlChange(bb.ctlNum, ctlVal, midiChannel);
     }
   });
 
   if (_renc_sw_val == LOW && (long)(millis() - _renc_sw_time) >= _sw_millis) {
     _renc_sw_time = millis();
-    _bb0.mode = (_bb0.mode == mnote) ? mcchg : mnote;
-    _bb1.mode = (_bb1.mode == mnote) ? mcchg : mnote;
-    _bb2.mode = (_bb2.mode == mnote) ? mcchg : mnote;
-    _bb3.mode = (_bb3.mode == mnote) ? mcchg : mnote;
-    _bb4.mode = (_bb4.mode == mnote) ? mcchg : mnote;
-    _bb5.mode = (_bb5.mode == mnote) ? mcchg : mnote;
-    _bb6.mode = (_bb6.mode == mnote) ? mcchg : mnote;
-    _bb7.mode = (_bb7.mode == mnote) ? mcchg : mnote;
+    _bb0.mode = (_bb0.mode == mnote) ? mcchg : (_bb0.mode == mcchg) ? mcchg2 : mnote;
+    _bb1.mode = (_bb1.mode == mnote) ? mcchg : (_bb1.mode == mcchg) ? mcchg2 : mnote;
+    _bb2.mode = (_bb2.mode == mnote) ? mcchg : (_bb2.mode == mcchg) ? mcchg2 : mnote;
+    _bb3.mode = (_bb3.mode == mnote) ? mcchg : (_bb3.mode == mcchg) ? mcchg2 : mnote;
+    _bb4.mode = (_bb4.mode == mnote) ? mcchg : (_bb4.mode == mcchg) ? mcchg2 : mnote;
+    _bb5.mode = (_bb5.mode == mnote) ? mcchg : (_bb5.mode == mcchg) ? mcchg2 : mnote;
+    _bb6.mode = (_bb6.mode == mnote) ? mcchg : (_bb6.mode == mcchg) ? mcchg2 : mnote;
+    _bb7.mode = (_bb7.mode == mnote) ? mcchg : (_bb7.mode == mcchg) ? mcchg2 : mnote;
   }
 
   long new_renc_val = _renc.read();
@@ -339,7 +347,7 @@ void Ctrlr::displayControllerView() {
   _display.print(_renc_val);
 
   _display.setCursor(5.55 * (marX + btnSz) + encRad, _display.height() / 2 - 15);
-  _display.print(F(_bb0.mode == mnote ? "N" : "C"));
+  _display.print(F(_bb0.mode == mnote ? "N" : _bb0.mode == mcchg ? "C" : "C2"));
 
   _display.display();
 }
