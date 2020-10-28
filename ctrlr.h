@@ -17,6 +17,8 @@
 // https://www.pjrc.com/teensy/td_libs_Encoder.html
 #include <Encoder.h>
 
+// https://playground.arduino.cc/Code/Metro/
+#include <Metro.h>
 
 // SSD1306 128x32 panel
 #define SCREEN_WIDTH 128
@@ -43,7 +45,8 @@ class Ctrlr
     enum btnMode {
       mnote,
       mcchg,
-      mcchg2  // Send MIDI_LOW on release
+      mcchg2,  // Send MIDI_LOW on release
+      mcchg3   // Repeat mode
     };
 
     btnMode defBtnMode = mnote;
@@ -55,7 +58,7 @@ class Ctrlr
       int ctlVal;
     };
 
-    using btnCallback = void (*)(Bounce& btn, const btnBehavior& bb, int& pinVal, const int& midiChannel, const bool fall);
+    using btnCallback = void (*)(Bounce& btn, const btnBehavior& bb, int& pinVal, int& btnTog, long& btnTime, const long& swMillis, const int& midiChannel, const bool fall);
 
     Ctrlr(
       int midiChannel,
@@ -78,8 +81,8 @@ class Ctrlr
     void drawBootRect(const int x, const int y, const int delayMs);
     void displayDebugView();
     void displayControllerView();
-    void displayButtonStatus(const int pinVal, const int btnX, const int btnY, const float btnSz, const float btnRad);
-    void btnOnEdge(Bounce &btn, const btnBehavior& bb, int& pinVal, const int& midiChannel, btnCallback cb);
+    void displayButtonStatus(const int pinVal, const int btnTog, const int btnX, const int btnY, const float btnSz, const float btnRad);
+    void btnOnEdge(Bounce &btn, const btnBehavior& bb, int& pinVal, int& btnTog, long& btnTime, const long& swMillis, const int& midiChannel, btnCallback cb);
 
   private:
     // the MIDI channel number to send messages
@@ -126,8 +129,25 @@ class Ctrlr
     btnBehavior _bb5;
     btnBehavior _bb6;
     btnBehavior _bb7;
+    int _btn0_tog;
+    int _btn1_tog;
+    int _btn2_tog;
+    int _btn3_tog;
+    int _btn4_tog;
+    int _btn5_tog;
+    int _btn6_tog;
+    int _btn7_tog;
+    long _btn0_time;
+    long _btn1_time;
+    long _btn2_time;
+    long _btn3_time;
+    long _btn4_time;
+    long _btn5_time;
+    long _btn6_time;
+    long _btn7_time;
     Encoder _renc;
     Adafruit_SSD1306 _display;
+    Metro _metro;
 };
 
 #endif
