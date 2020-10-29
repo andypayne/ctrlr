@@ -39,6 +39,8 @@
 
 #define MODE_CHG_CTL_NUM  28
 
+#define METRO_BPM 120
+
 class Ctrlr
 {
   public:

@@ -47,7 +47,7 @@ Ctrlr::Ctrlr(
       OLED_DC,
       OLED_RESET,
       OLED_CS),
-    _metro(500)
+    _metro((60.0 / METRO_BPM) * 1000)
 {
   _midiChannel = midiChannel;
   _in0Pin = in0Pin;
@@ -408,14 +408,14 @@ void Ctrlr::displayControllerView() {
   float btnRad = 2;
   float btn0X = marX;
   float btn0Y = marY;
-  displayButtonStatus(_pin0_val, _btn0_tog, btn0X, btn0Y, btnSz, btnRad);
-  displayButtonStatus(_pin1_val, _btn1_tog, 1 * (marX + btnSz) + btn0X, btn0Y, btnSz, btnRad);
-  displayButtonStatus(_pin2_val, _btn2_tog, 2 * (marX + btnSz) + btn0X, btn0Y, btnSz, btnRad);
-  displayButtonStatus(_pin3_val, _btn3_tog, 3 * (marX + btnSz) + btn0X, btn0Y, btnSz, btnRad);
-  displayButtonStatus(_pin4_val, _btn4_tog, btn0X, marY + btnSz + btn0Y, btnSz, btnRad);
-  displayButtonStatus(_pin5_val, _btn5_tog, 1 * (marX + btnSz) + btn0X, marY + btnSz + btn0Y, btnSz, btnRad);
-  displayButtonStatus(_pin6_val, _btn6_tog, 2 * (marX + btnSz) + btn0X, marY + btnSz + btn0Y, btnSz, btnRad);
-  displayButtonStatus(_pin7_val, _btn7_tog, 3 * (marX + btnSz) + btn0X, marY + btnSz + btn0Y, btnSz, btnRad);
+  displayButtonStatus(_pin0_val, _bb0.mode == mcchg3 ? _btn0_tog : HIGH, btn0X, btn0Y, btnSz, btnRad);
+  displayButtonStatus(_pin1_val, _bb1.mode == mcchg3 ? _btn1_tog : HIGH, 1 * (marX + btnSz) + btn0X, btn0Y, btnSz, btnRad);
+  displayButtonStatus(_pin2_val, _bb2.mode == mcchg3 ? _btn2_tog : HIGH, 2 * (marX + btnSz) + btn0X, btn0Y, btnSz, btnRad);
+  displayButtonStatus(_pin3_val, _bb3.mode == mcchg3 ? _btn3_tog : HIGH, 3 * (marX + btnSz) + btn0X, btn0Y, btnSz, btnRad);
+  displayButtonStatus(_pin4_val, _bb4.mode == mcchg3 ? _btn4_tog : HIGH, btn0X, marY + btnSz + btn0Y, btnSz, btnRad);
+  displayButtonStatus(_pin5_val, _bb5.mode == mcchg3 ? _btn5_tog : HIGH, 1 * (marX + btnSz) + btn0X, marY + btnSz + btn0Y, btnSz, btnRad);
+  displayButtonStatus(_pin6_val, _bb6.mode == mcchg3 ? _btn6_tog : HIGH, 2 * (marX + btnSz) + btn0X, marY + btnSz + btn0Y, btnSz, btnRad);
+  displayButtonStatus(_pin7_val, _bb7.mode == mcchg3 ? _btn7_tog : HIGH, 3 * (marX + btnSz) + btn0X, marY + btnSz + btn0Y, btnSz, btnRad);
 
   // Encoder
   int encRad = 10;
@@ -468,6 +468,11 @@ void Ctrlr::displayControllerView() {
       break;
     default:
       break;
+  }
+
+  if (_bb0.mode == mcchg3) {
+    _display.setCursor(5.55 * (marX + btnSz) + encRad, _display.height() / 2 + 8);
+    _display.print(METRO_BPM);
   }
 
   _display.display();
