@@ -39,6 +39,7 @@
 
 #define MODE_CHG_CTL_NUM  28
 
+#define BPM_TO_MILLIS(bpm) ((60.0 / bpm) * 1000)
 #define METRO_BPM 120
 
 class Ctrlr
@@ -112,6 +113,7 @@ class Ctrlr
     int _pin7_val;
     int _renc_sw_val;
     long _renc_val;
+    long _renc_metro_val;
     long _renc_sw_time;
     long _sw_millis;
 
@@ -149,6 +151,7 @@ class Ctrlr
     long _btn7_time;
     Encoder _renc;
     Adafruit_SSD1306 _display;
+    int _metroBpm;
     Metro _metro;
 };
 

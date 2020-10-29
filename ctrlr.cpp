@@ -47,7 +47,8 @@ Ctrlr::Ctrlr(
       OLED_DC,
       OLED_RESET,
       OLED_CS),
-    _metro((60.0 / METRO_BPM) * 1000)
+    _metroBpm(METRO_BPM),
+    _metro(BPM_TO_MILLIS(METRO_BPM))
 {
   _midiChannel = midiChannel;
   _in0Pin = in0Pin;
@@ -82,6 +83,7 @@ Ctrlr::Ctrlr(
   _pin7_val = HIGH;
   _renc_sw_val = 0;
   _renc_val = 0;
+  _renc_metro_val = 0;
   _renc_sw_time = 0;
   _btn0_time = 0;
   _btn1_time = 0;
@@ -384,8 +386,15 @@ void Ctrlr::update() {
     usbMIDI.sendControlChange(MODE_CHG_CTL_NUM, _bb0.mode, _midiChannel);
   }
 
+  // TODO: This mode control is not yet correct. Switching which setting is changed causes jumps in the values.
+  // Also, make the renc display show the value as it's being changed for each mode.
   long new_renc_val = _renc.read();
-  if (new_renc_val != _renc_val) {
+  if (_bb0.mode == mcchg3 && _pin0_val == LOW && new_renc_val != _renc_metro_val && new_renc_val != _renc_val) {
+    _metroBpm = _metroBpm + (new_renc_val - _renc_metro_val);
+    _renc_metro_val = new_renc_val;
+    _metro.interval(BPM_TO_MILLIS(_metroBpm));
+    _metro.reset();
+  } else if (new_renc_val != _renc_val && new_renc_val != _renc_metro_val) {
     _renc_val = new_renc_val;
     usbMIDI.sendPitchBend(_renc_val, _midiChannel);
   }
@@ -472,7 +481,7 @@ void Ctrlr::displayControllerView() {
 
   if (_bb0.mode == mcchg3) {
     _display.setCursor(5.55 * (marX + btnSz) + encRad, _display.height() / 2 + 8);
-    _display.print(METRO_BPM);
+    _display.print(_metroBpm);
   }
 
   _display.display();
