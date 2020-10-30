@@ -113,7 +113,7 @@ class Ctrlr
     int _pin7_val;
     int _renc_sw_val;
     long _renc_val;
-    long _renc_metro_val;
+    long _renc_pitch_val;
     long _renc_sw_time;
     long _sw_millis;
 

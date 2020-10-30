@@ -83,7 +83,7 @@ Ctrlr::Ctrlr(
   _pin7_val = HIGH;
   _renc_sw_val = 0;
   _renc_val = 0;
-  _renc_metro_val = 0;
+  _renc_pitch_val = 0;
   _renc_sw_time = 0;
   _btn0_time = 0;
   _btn1_time = 0;
@@ -386,17 +386,22 @@ void Ctrlr::update() {
     usbMIDI.sendControlChange(MODE_CHG_CTL_NUM, _bb0.mode, _midiChannel);
   }
 
-  // TODO: This mode control is not yet correct. Switching which setting is changed causes jumps in the values.
-  // Also, make the renc display show the value as it's being changed for each mode.
   long new_renc_val = _renc.read();
-  if (_bb0.mode == mcchg3 && _pin0_val == LOW && new_renc_val != _renc_metro_val && new_renc_val != _renc_val) {
-    _metroBpm = _metroBpm + (new_renc_val - _renc_metro_val);
-    _renc_metro_val = new_renc_val;
-    _metro.interval(BPM_TO_MILLIS(_metroBpm));
-    _metro.reset();
-  } else if (new_renc_val != _renc_val && new_renc_val != _renc_metro_val) {
-    _renc_val = new_renc_val;
-    usbMIDI.sendPitchBend(_renc_val, _midiChannel);
+  if (_bb0.mode == mcchg3 && _pin0_val == LOW) {
+    // Tempo mode
+    if (new_renc_val != _renc_val) {
+      _metroBpm = _metroBpm + (new_renc_val - _renc_val);
+      _metro.interval(BPM_TO_MILLIS(_metroBpm));
+      _metro.reset();
+      _renc_val = new_renc_val;
+    }
+  } else {
+    // Pitch bend mode
+    if (new_renc_val != _renc_val) {
+      _renc_pitch_val = _renc_pitch_val + (new_renc_val - _renc_val);
+      usbMIDI.sendPitchBend(_renc_pitch_val, _midiChannel);
+      _renc_val = new_renc_val;
+    }
   }
 
   // http://forum.pjrc.com/threads/24179-Teensy-3-Ableton-Analog-CC-causes-midi-crash
@@ -428,7 +433,6 @@ void Ctrlr::displayControllerView() {
 
   // Encoder
   int encRad = 10;
-  //float rencX = _display.width() - encRad - marX - 24;
   float rencX = 4.5 * (marX + btnSz) + encRad;
   float rencY = _display.height() / 2;
   if (_renc_sw_val == LOW) {
@@ -437,8 +441,15 @@ void Ctrlr::displayControllerView() {
     _display.drawCircle(rencX, rencY, 0.5 * encRad, SSD1306_WHITE);
   }
 
-  float indX = encRad * cos(2 * PI * _renc_val / 80.0 - PI / 2);
-  float indY = encRad * sin(2 * PI * _renc_val / 80.0 - PI / 2);
+  float indX = 0;
+  float indY = 0;
+  if (_bb0.mode == mcchg3 && _pin0_val == LOW) {
+    indX = encRad * cos(2 * PI * _metroBpm / 80.0 - PI / 2);
+    indY = encRad * sin(2 * PI * _metroBpm / 80.0 - PI / 2);
+  } else {
+    indX = encRad * cos(2 * PI * _renc_pitch_val / 80.0 - PI / 2);
+    indY = encRad * sin(2 * PI * _renc_pitch_val / 80.0 - PI / 2);
+  }
 
   float ind1X = 0.9 * indX + rencX;
   float ind1Y = 0.9 * indY + rencY;
@@ -459,7 +470,7 @@ void Ctrlr::displayControllerView() {
   _display.setTextSize(1);
   _display.setTextColor(SSD1306_WHITE);
   _display.setCursor(5.55 * (marX + btnSz) + encRad, _display.height() / 2 - 3);
-  _display.print(_renc_val);
+  _display.print(_renc_pitch_val);
 
   _display.setCursor(5.55 * (marX + btnSz) + encRad, _display.height() / 2 - 15);
   switch(_bb0.mode) {
