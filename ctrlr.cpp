@@ -411,6 +411,24 @@ void Ctrlr::update() {
   //displayDebugView();
 }
 
+void Ctrlr::drawRencIndicator(const float indX, const float indY, const float rencX, const float rencY) {
+  float ind1X = 0.9 * indX + rencX;
+  float ind1Y = 0.9 * indY + rencY;
+  _display.drawPixel(ind1X, ind1Y, SSD1306_WHITE);
+  float ind2X = 1.0 * indX + rencX;
+  float ind2Y = 1.0 * indY + rencY;
+  _display.drawPixel(ind2X, ind2Y, SSD1306_WHITE);
+  float ind3X = 1.1 * indX + rencX;
+  float ind3Y = 1.1 * indY + rencY;
+  _display.drawPixel(ind3X, ind3Y, SSD1306_WHITE);
+  float ind4X = 1.2 * indX + rencX;
+  float ind4Y = 1.2 * indY + rencY;
+  _display.drawPixel(ind4X, ind4Y, SSD1306_WHITE);
+  float ind5X = 1.3 * indX + rencX;
+  float ind5Y = 1.3 * indY + rencY;
+  _display.drawPixel(ind5X, ind5Y, SSD1306_WHITE);
+}
+
 void Ctrlr::displayControllerView() {
   _display.clearDisplay();
 
@@ -441,31 +459,17 @@ void Ctrlr::displayControllerView() {
     _display.drawCircle(rencX, rencY, 0.5 * encRad, SSD1306_WHITE);
   }
 
-  float indX = 0;
-  float indY = 0;
-  if (_bb0.mode == mcchg3 && _pin0_val == LOW) {
-    indX = encRad * cos(2 * PI * _metroBpm / 80.0 - PI / 2);
-    indY = encRad * sin(2 * PI * _metroBpm / 80.0 - PI / 2);
-  } else {
-    indX = encRad * cos(2 * PI * _renc_pitch_val / 80.0 - PI / 2);
-    indY = encRad * sin(2 * PI * _renc_pitch_val / 80.0 - PI / 2);
-  }
+  // Pitch renc
+  float indPitchX = encRad * cos(2 * PI * _renc_pitch_val / 80.0 - PI / 2);
+  float indPitchY = encRad * sin(2 * PI * _renc_pitch_val / 80.0 - PI / 2);
+  drawRencIndicator(indPitchX, indPitchY, rencX, rencY);
 
-  float ind1X = 0.9 * indX + rencX;
-  float ind1Y = 0.9 * indY + rencY;
-  _display.drawPixel(ind1X, ind1Y, SSD1306_WHITE);
-  float ind2X = 1.0 * indX + rencX;
-  float ind2Y = 1.0 * indY + rencY;
-  _display.drawPixel(ind2X, ind2Y, SSD1306_WHITE);
-  float ind3X = 1.1 * indX + rencX;
-  float ind3Y = 1.1 * indY + rencY;
-  _display.drawPixel(ind3X, ind3Y, SSD1306_WHITE);
-  float ind4X = 1.2 * indX + rencX;
-  float ind4Y = 1.2 * indY + rencY;
-  _display.drawPixel(ind4X, ind4Y, SSD1306_WHITE);
-  float ind5X = 1.3 * indX + rencX;
-  float ind5Y = 1.3 * indY + rencY;
-  _display.drawPixel(ind5X, ind5Y, SSD1306_WHITE);
+  if (_bb0.mode == mcchg3 && _pin0_val == LOW) {
+    // Metro renc
+    float indMetroX = encRad * cos(2 * PI * _metroBpm / 80.0 - PI / 2);
+    float indMetroY = encRad * sin(2 * PI * _metroBpm / 80.0 - PI / 2);
+    drawRencIndicator(indMetroX, indMetroY, rencX, rencY);
+  }
 
   _display.setTextSize(1);
   _display.setTextColor(SSD1306_WHITE);
