@@ -93,6 +93,8 @@ Ctrlr::Ctrlr(
   _btn5_time = 0;
   _btn6_time = 0;
   _btn7_time = 0;
+
+  _seqStep = 0;
 }
 
 void Ctrlr::setup() {
@@ -204,6 +206,11 @@ void Ctrlr::update() {
     }
     if (_btn7_tog == LOW) {
       usbMIDI.sendControlChange(_bb7.ctlNum, _bb7.ctlVal, _midiChannel);
+    }
+  } else if (_bb0.mode == mnseq && _metro.check() == 1) {
+    _seqStep += 1;
+    if (_seqStep == NUM_SEQ_STEPS) {
+      _seqStep = 0;
     }
   }
 
@@ -370,6 +377,16 @@ void Ctrlr::update() {
         _bb7.mode = mcchg3;
         break;
       case mcchg3:
+        _bb0.mode = mnseq;
+        _bb1.mode = mnseq;
+        _bb2.mode = mnseq;
+        _bb3.mode = mnseq;
+        _bb4.mode = mnseq;
+        _bb5.mode = mnseq;
+        _bb6.mode = mnseq;
+        _bb7.mode = mnseq;
+        break;
+      case mnseq:
         _bb0.mode = mnote;
         _bb1.mode = mnote;
         _bb2.mode = mnote;
@@ -387,7 +404,7 @@ void Ctrlr::update() {
   }
 
   long new_renc_val = _renc.read();
-  if (_bb0.mode == mcchg3 && _pin0_val == LOW) {
+  if ((_bb0.mode == mcchg3 && _pin0_val == LOW) || _bb0.mode == mnseq) {
     // Tempo mode
     if (new_renc_val != _renc_val) {
       _metroBpm = _metroBpm + (new_renc_val - _renc_val);
@@ -440,14 +457,25 @@ void Ctrlr::displayControllerView() {
   float btnRad = 2;
   float btn0X = marX;
   float btn0Y = marY;
-  displayButtonStatus(_pin0_val, _bb0.mode == mcchg3 ? _btn0_tog : HIGH, btn0X, btn0Y, btnSz, btnRad);
-  displayButtonStatus(_pin1_val, _bb1.mode == mcchg3 ? _btn1_tog : HIGH, 1 * (marX + btnSz) + btn0X, btn0Y, btnSz, btnRad);
-  displayButtonStatus(_pin2_val, _bb2.mode == mcchg3 ? _btn2_tog : HIGH, 2 * (marX + btnSz) + btn0X, btn0Y, btnSz, btnRad);
-  displayButtonStatus(_pin3_val, _bb3.mode == mcchg3 ? _btn3_tog : HIGH, 3 * (marX + btnSz) + btn0X, btn0Y, btnSz, btnRad);
-  displayButtonStatus(_pin4_val, _bb4.mode == mcchg3 ? _btn4_tog : HIGH, btn0X, marY + btnSz + btn0Y, btnSz, btnRad);
-  displayButtonStatus(_pin5_val, _bb5.mode == mcchg3 ? _btn5_tog : HIGH, 1 * (marX + btnSz) + btn0X, marY + btnSz + btn0Y, btnSz, btnRad);
-  displayButtonStatus(_pin6_val, _bb6.mode == mcchg3 ? _btn6_tog : HIGH, 2 * (marX + btnSz) + btn0X, marY + btnSz + btn0Y, btnSz, btnRad);
-  displayButtonStatus(_pin7_val, _bb7.mode == mcchg3 ? _btn7_tog : HIGH, 3 * (marX + btnSz) + btn0X, marY + btnSz + btn0Y, btnSz, btnRad);
+  if (_bb0.mode == mnseq) {
+    displayButtonStatus(_pin0_val, _seqStep == 0 ? LOW : HIGH, btn0X, btn0Y, btnSz, btnRad);
+    displayButtonStatus(_pin1_val, _seqStep == 1 ? LOW : HIGH, 1 * (marX + btnSz) + btn0X, btn0Y, btnSz, btnRad);
+    displayButtonStatus(_pin2_val, _seqStep == 2 ? LOW : HIGH, 2 * (marX + btnSz) + btn0X, btn0Y, btnSz, btnRad);
+    displayButtonStatus(_pin3_val, _seqStep == 3 ? LOW : HIGH, 3 * (marX + btnSz) + btn0X, btn0Y, btnSz, btnRad);
+    displayButtonStatus(_pin4_val, _seqStep == 4 ? LOW : HIGH, btn0X, marY + btnSz + btn0Y, btnSz, btnRad);
+    displayButtonStatus(_pin5_val, _seqStep == 5 ? LOW : HIGH, 1 * (marX + btnSz) + btn0X, marY + btnSz + btn0Y, btnSz, btnRad);
+    displayButtonStatus(_pin6_val, _seqStep == 6 ? LOW : HIGH, 2 * (marX + btnSz) + btn0X, marY + btnSz + btn0Y, btnSz, btnRad);
+    displayButtonStatus(_pin7_val, _seqStep == 7 ? LOW : HIGH, 3 * (marX + btnSz) + btn0X, marY + btnSz + btn0Y, btnSz, btnRad);
+  } else {
+    displayButtonStatus(_pin0_val, _bb0.mode == mcchg3 ? _btn0_tog : HIGH, btn0X, btn0Y, btnSz, btnRad);
+    displayButtonStatus(_pin1_val, _bb1.mode == mcchg3 ? _btn1_tog : HIGH, 1 * (marX + btnSz) + btn0X, btn0Y, btnSz, btnRad);
+    displayButtonStatus(_pin2_val, _bb2.mode == mcchg3 ? _btn2_tog : HIGH, 2 * (marX + btnSz) + btn0X, btn0Y, btnSz, btnRad);
+    displayButtonStatus(_pin3_val, _bb3.mode == mcchg3 ? _btn3_tog : HIGH, 3 * (marX + btnSz) + btn0X, btn0Y, btnSz, btnRad);
+    displayButtonStatus(_pin4_val, _bb4.mode == mcchg3 ? _btn4_tog : HIGH, btn0X, marY + btnSz + btn0Y, btnSz, btnRad);
+    displayButtonStatus(_pin5_val, _bb5.mode == mcchg3 ? _btn5_tog : HIGH, 1 * (marX + btnSz) + btn0X, marY + btnSz + btn0Y, btnSz, btnRad);
+    displayButtonStatus(_pin6_val, _bb6.mode == mcchg3 ? _btn6_tog : HIGH, 2 * (marX + btnSz) + btn0X, marY + btnSz + btn0Y, btnSz, btnRad);
+    displayButtonStatus(_pin7_val, _bb7.mode == mcchg3 ? _btn7_tog : HIGH, 3 * (marX + btnSz) + btn0X, marY + btnSz + btn0Y, btnSz, btnRad);
+  }
 
   // Encoder
   int encRad = 10;
@@ -460,11 +488,13 @@ void Ctrlr::displayControllerView() {
   }
 
   // Pitch renc
-  float indPitchX = encRad * cos(2 * PI * _renc_pitch_val / 80.0 - PI / 2);
-  float indPitchY = encRad * sin(2 * PI * _renc_pitch_val / 80.0 - PI / 2);
-  drawRencIndicator(indPitchX, indPitchY, rencX, rencY);
+  if (_bb0.mode != mnseq) {
+    float indPitchX = encRad * cos(2 * PI * _renc_pitch_val / 80.0 - PI / 2);
+    float indPitchY = encRad * sin(2 * PI * _renc_pitch_val / 80.0 - PI / 2);
+    drawRencIndicator(indPitchX, indPitchY, rencX, rencY);
+  }
 
-  if (_bb0.mode == mcchg3 && _pin0_val == LOW) {
+  if ((_bb0.mode == mcchg3 && _pin0_val == LOW) || _bb0.mode == mnseq) {
     // Metro renc
     float indMetroX = encRad * cos(2 * PI * _metroBpm / 80.0 - PI / 2);
     float indMetroY = encRad * sin(2 * PI * _metroBpm / 80.0 - PI / 2);
@@ -490,11 +520,14 @@ void Ctrlr::displayControllerView() {
     case mcchg3:
       _display.print(F("C3"));
       break;
+    case mnseq:
+      _display.print(F("NS"));
+      break;
     default:
       break;
   }
 
-  if (_bb0.mode == mcchg3) {
+  if (_bb0.mode == mcchg3 || _bb0.mode == mnseq) {
     _display.setCursor(5.55 * (marX + btnSz) + encRad, _display.height() / 2 + 8);
     _display.print(_metroBpm);
   }

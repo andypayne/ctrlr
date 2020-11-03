@@ -42,6 +42,8 @@
 #define BPM_TO_MILLIS(bpm) ((60.0 / bpm) * 1000)
 #define METRO_BPM 120
 
+#define NUM_SEQ_STEPS  8
+
 class Ctrlr
 {
   public:
@@ -49,7 +51,8 @@ class Ctrlr
       mnote,
       mcchg,
       mcchg2,  // Send MIDI_LOW on release
-      mcchg3   // Repeat mode
+      mcchg3,  // Repeat mode
+      mnseq    // Note sequencer mode
     };
 
     btnMode defBtnMode = mnote;
@@ -154,6 +157,7 @@ class Ctrlr
     Adafruit_SSD1306 _display;
     int _metroBpm;
     Metro _metro;
+    int _seqStep;
 };
 
 #endif
