@@ -44,6 +44,8 @@
 
 #define NUM_SEQ_STEPS  8
 
+int cycleBtnSeq(const int btnSeq);
+
 class Ctrlr
 {
   public:
@@ -64,7 +66,7 @@ class Ctrlr
       int ctlVal;
     };
 
-    using btnCallback = void (*)(Bounce& btn, const btnBehavior& bb, int& pinVal, int& btnTog, long& btnTime, const long& swMillis, const int& midiChannel, const bool fall);
+    using btnCallback = void (*)(Bounce& btn, const btnBehavior& bb, int& pinVal, int& btnTog, int& btnSeq, long& btnTime, const long& swMillis, const int& midiChannel, const bool fall);
 
     Ctrlr(
       int midiChannel,
@@ -89,7 +91,7 @@ class Ctrlr
     void drawRencIndicator(const float indX, const float indY, const float rencX, const float rencY);
     void displayControllerView();
     void displayButtonStatus(const int pinVal, const int btnTog, const int btnX, const int btnY, const float btnSz, const float btnRad);
-    void btnOnEdge(Bounce &btn, const btnBehavior& bb, int& pinVal, int& btnTog, long& btnTime, const long& swMillis, const int& midiChannel, btnCallback cb);
+    void btnOnEdge(Bounce &btn, const btnBehavior& bb, int& pinVal, int& btnTog, int& btnSeq, long& btnTime, const long& swMillis, const int& midiChannel, btnCallback cb);
 
   private:
     // the MIDI channel number to send messages
@@ -158,6 +160,14 @@ class Ctrlr
     int _metroBpm;
     Metro _metro;
     int _seqStep;
+    int _btn0_seq;
+    int _btn1_seq;
+    int _btn2_seq;
+    int _btn3_seq;
+    int _btn4_seq;
+    int _btn5_seq;
+    int _btn6_seq;
+    int _btn7_seq;
 };
 
 #endif
