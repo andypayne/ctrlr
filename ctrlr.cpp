@@ -184,11 +184,17 @@ int cycleBtnSeq(const int btnSeq) {
     case 127:
       return 0;
       break;
-    case 63:
+    case 95:
       return 127;
       break;
-    case 0:
+    case 63:
+      return 95;
+      break;
+    case 31:
       return 63;
+      break;
+    case 0:
+      return 31;
       break;
     default:
       return 0;
