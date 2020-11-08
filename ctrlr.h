@@ -20,6 +20,8 @@
 // https://playground.arduino.cc/Code/Metro/
 #include <Metro.h>
 
+#include "../../buttoner/buttoner.h"
+
 // SSD1306 128x32 panel
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 32
@@ -30,6 +32,9 @@
 #define OLED_DC    11
 #define OLED_CS    12
 #define OLED_RESET 13
+
+#define SW_MILLIS      450
+#define SW_DBL_MILLIS  200
 
 #define VEL_NOTE_ON   99
 #define VEL_NOTE_OFF  0
@@ -45,6 +50,7 @@
 #define NUM_SEQ_STEPS  8
 
 int cycleBtnSeq(const int btnSeq);
+
 
 class Ctrlr
 {
@@ -122,6 +128,8 @@ class Ctrlr
     long _renc_pitch_val;
     long _renc_sw_time;
     long _sw_millis;
+
+    Buttoner _rencBtnr;
 
     Bounce _btn0;
     Bounce _btn1;

@@ -11,3 +11,8 @@ A programmable MIDI Controller
 - A rotary encoder
 
 
+## Dependencies
+
+- Requires [buttoner](https://github.com/andypayne/buttoner)
+
+

@@ -13,7 +13,8 @@ Ctrlr::Ctrlr(
   int inRencSwitch,
   int inRencDT,
   int inRencCLK) :
-    _sw_millis(500),
+    _sw_millis(SW_MILLIS),
+    _rencBtnr(HIGH, LOW, HIGH, SW_MILLIS, SW_DBL_MILLIS),
     _btn0(in0Pin, 5),
     _btn1(in1Pin, 5),
     _btn2(in2Pin, 5),
@@ -112,6 +113,8 @@ void Ctrlr::setup() {
 
   delay(500);
 
+  _rencBtnr.setup();
+
   // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
   if(!_display.begin(SSD1306_SWITCHCAPVCC)) {
     Serial.println(F("SSD1306 allocation failed"));
@@ -154,7 +157,7 @@ void Ctrlr::displayBootScreen() {
   _display.cp437(true);
   _display.println(F("CTRLR"));
   _display.display();
-  delay(1200);
+  delay(750);
   _display.clearDisplay();
   for(int16_t i = 0; i < _display.height() / 2; i += 2) {
     drawBootRect(i, i, 16);
@@ -204,6 +207,7 @@ int cycleBtnSeq(const int btnSeq) {
 
 void Ctrlr::update() {
   _renc_sw_val = digitalRead(_inRencSwitch);
+  _rencBtnr.setVal(_renc_sw_val);
   _btn0.update();
   _btn1.update();
   _btn2.update();
@@ -450,8 +454,14 @@ void Ctrlr::update() {
     }
   });
 
-  if (_renc_sw_val == LOW && (long)(millis() - _renc_sw_time) >= _sw_millis) {
-    _renc_sw_time = millis();
+  _rencBtnr.update();
+
+  if (_rencBtnr.isSinglePressed()) {
+    //Serial.println("_SINGLE_");
+  }
+  if (_rencBtnr.isDoublePressed()) {
+      // Switch mode
+    //Serial.println("_DOUBLE_");
     switch(_bb0.mode) {
       case mnote:
         _bb0.mode = mcchg;
@@ -506,8 +516,13 @@ void Ctrlr::update() {
       default:
         break;
     }
-
     usbMIDI.sendControlChange(MODE_CHG_CTL_NUM, _bb0.mode, _midiChannel);
+  }
+  if (_rencBtnr.isHeldStarted()) {
+    //Serial.println("_HOLD_");
+  }
+  if (_rencBtnr.isReleased()) {
+    //Serial.println("_RELEASED_");
   }
 
   long new_renc_val = _renc.read();
