@@ -15,6 +15,14 @@ Ctrlr::Ctrlr(
   int inRencCLK) :
     _sw_millis(SW_MILLIS),
     _rencBtnr(HIGH, LOW, HIGH, SW_MILLIS, SW_DBL_MILLIS),
+    _b0Btnr(HIGH, LOW, HIGH, SW_MILLIS, SW_DBL_MILLIS),
+    _b1Btnr(HIGH, LOW, HIGH, SW_MILLIS, SW_DBL_MILLIS),
+    _b2Btnr(HIGH, LOW, HIGH, SW_MILLIS, SW_DBL_MILLIS),
+    _b3Btnr(HIGH, LOW, HIGH, SW_MILLIS, SW_DBL_MILLIS),
+    _b4Btnr(HIGH, LOW, HIGH, SW_MILLIS, SW_DBL_MILLIS),
+    _b5Btnr(HIGH, LOW, HIGH, SW_MILLIS, SW_DBL_MILLIS),
+    _b6Btnr(HIGH, LOW, HIGH, SW_MILLIS, SW_DBL_MILLIS),
+    _b7Btnr(HIGH, LOW, HIGH, SW_MILLIS, SW_DBL_MILLIS),
     _btn0(in0Pin, 5),
     _btn1(in1Pin, 5),
     _btn2(in2Pin, 5),
@@ -49,7 +57,8 @@ Ctrlr::Ctrlr(
       OLED_RESET,
       OLED_CS),
     _metroBpm(METRO_BPM),
-    _metro(BPM_TO_MILLIS(METRO_BPM))
+    _metro(BPM_TO_MILLIS(METRO_BPM)),
+    _seqNote(0)
 {
   _midiChannel = midiChannel;
   _in0Pin = in0Pin;
@@ -114,6 +123,14 @@ void Ctrlr::setup() {
   delay(500);
 
   _rencBtnr.setup();
+  _b0Btnr.setup();
+  _b1Btnr.setup();
+  _b2Btnr.setup();
+  _b3Btnr.setup();
+  _b4Btnr.setup();
+  _b5Btnr.setup();
+  _b6Btnr.setup();
+  _b7Btnr.setup();
 
   // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
   if(!_display.begin(SSD1306_SWITCHCAPVCC)) {
@@ -245,41 +262,49 @@ void Ctrlr::update() {
   } else if (_bb0.mode == mnseq && _metro.check() == 1) {
     switch(_seqStep) {
       case 0:
+          _seqNote = _bb0.noteVal;
 //        if (_btn0_seq > 0) {
           usbMIDI.sendNoteOn(_bb0.noteVal, _btn0_seq, _midiChannel);
 //        }
         break;
       case 1:
+          _seqNote = _bb1.noteVal;
 //        if (_btn1_seq > 0) {
           usbMIDI.sendNoteOn(_bb1.noteVal, _btn1_seq, _midiChannel);
 //        }
         break;
       case 2:
+          _seqNote = _bb2.noteVal;
 //        if (_btn2_seq > 0) {
           usbMIDI.sendNoteOn(_bb2.noteVal, _btn2_seq, _midiChannel);
 //        }
         break;
       case 3:
+          _seqNote = _bb3.noteVal;
 //        if (_btn3_seq > 0) {
           usbMIDI.sendNoteOn(_bb3.noteVal, _btn3_seq, _midiChannel);
 //        }
         break;
       case 4:
+          _seqNote = _bb4.noteVal;
 //        if (_btn4_seq > 0) {
           usbMIDI.sendNoteOn(_bb4.noteVal, _btn4_seq, _midiChannel);
 //        }
         break;
       case 5:
+          _seqNote = _bb5.noteVal;
 //        if (_btn5_seq > 0) {
           usbMIDI.sendNoteOn(_bb5.noteVal, _btn5_seq, _midiChannel);
 //        }
         break;
       case 6:
+          _seqNote = _bb6.noteVal;
 //        if (_btn6_seq > 0) {
           usbMIDI.sendNoteOn(_bb6.noteVal, _btn6_seq, _midiChannel);
 //        }
         break;
       case 7:
+          _seqNote = _bb7.noteVal;
 //        if (_btn7_seq > 0) {
           usbMIDI.sendNoteOn(_bb7.noteVal, _btn7_seq, _midiChannel);
 //        }
@@ -292,6 +317,23 @@ void Ctrlr::update() {
       _seqStep = 0;
     }
   }
+
+  _b0Btnr.setVal(digitalRead(_in0Pin));
+  _b0Btnr.update();
+  _b1Btnr.setVal(digitalRead(_in1Pin));
+  _b1Btnr.update();
+  _b2Btnr.setVal(digitalRead(_in2Pin));
+  _b2Btnr.update();
+  _b3Btnr.setVal(digitalRead(_in3Pin));
+  _b3Btnr.update();
+  _b4Btnr.setVal(digitalRead(_in4Pin));
+  _b4Btnr.update();
+  _b5Btnr.setVal(digitalRead(_in5Pin));
+  _b5Btnr.update();
+  _b6Btnr.setVal(digitalRead(_in6Pin));
+  _b6Btnr.update();
+  _b7Btnr.setVal(digitalRead(_in7Pin));
+  _b7Btnr.update();
 
   btnOnEdge(_btn0, _bb0, _pin0_val, _btn0_tog, _btn0_seq, _btn0_time, _sw_millis, _midiChannel, [](Bounce& btn, const btnBehavior& bb, int& pinVal, int& btnTog, int& btnSeq, long& btnTime, const long& swMillis, const int& midiChannel, const bool fall) {
     pinVal = fall ? LOW : HIGH;
@@ -526,7 +568,55 @@ void Ctrlr::update() {
   }
 
   long new_renc_val = _renc.read();
-  if ((_bb0.mode == mcchg3 && _pin0_val == LOW) || _bb0.mode == mnseq) {
+  if (_bb0.mode == mnseq && _b0Btnr.isHeld()) {
+    // Note val
+    if (new_renc_val != _renc_val) {
+      _bb0.noteVal += (new_renc_val - _renc_val);
+      _renc_val = new_renc_val;
+    }
+  } else if (_bb1.mode == mnseq && _b1Btnr.isHeld()) {
+    // Note val
+    if (new_renc_val != _renc_val) {
+      _bb1.noteVal += (new_renc_val - _renc_val);
+      _renc_val = new_renc_val;
+    }
+  } else if (_bb2.mode == mnseq && _b2Btnr.isHeld()) {
+    // Note val
+    if (new_renc_val != _renc_val) {
+      _bb2.noteVal += (new_renc_val - _renc_val);
+      _renc_val = new_renc_val;
+    }
+  } else if (_bb3.mode == mnseq && _b3Btnr.isHeld()) {
+    // Note val
+    if (new_renc_val != _renc_val) {
+      _bb3.noteVal += (new_renc_val - _renc_val);
+      _renc_val = new_renc_val;
+    }
+  } else if (_bb4.mode == mnseq && _b4Btnr.isHeld()) {
+    // Note val
+    if (new_renc_val != _renc_val) {
+      _bb4.noteVal += (new_renc_val - _renc_val);
+      _renc_val = new_renc_val;
+    }
+  } else if (_bb5.mode == mnseq && _b5Btnr.isHeld()) {
+    // Note val
+    if (new_renc_val != _renc_val) {
+      _bb5.noteVal += (new_renc_val - _renc_val);
+      _renc_val = new_renc_val;
+    }
+  } else if (_bb6.mode == mnseq && _b6Btnr.isHeld()) {
+    // Note val
+    if (new_renc_val != _renc_val) {
+      _bb6.noteVal += (new_renc_val - _renc_val);
+      _renc_val = new_renc_val;
+    }
+  } else if (_bb7.mode == mnseq && _b7Btnr.isHeld()) {
+    // Note val
+    if (new_renc_val != _renc_val) {
+      _bb7.noteVal += (new_renc_val - _renc_val);
+      _renc_val = new_renc_val;
+    }
+  } else if ((_bb0.mode == mcchg3 && _pin0_val == LOW) || _bb0.mode == mnseq) {
     // Tempo mode
     if (new_renc_val != _renc_val) {
       _metroBpm = _metroBpm + (new_renc_val - _renc_val);
@@ -650,7 +740,27 @@ void Ctrlr::displayControllerView() {
   _display.setTextSize(1);
   _display.setTextColor(SSD1306_WHITE);
   _display.setCursor(5.55 * (marX + btnSz) + encRad, _display.height() / 2 - 3);
-  _display.print(_renc_pitch_val);
+  if (_bb0.mode == mnseq && _b0Btnr.isHeld()) {
+    _display.print(_bb0.noteVal);
+  } else if (_bb1.mode == mnseq && _b1Btnr.isHeld()) {
+    _display.print(_bb1.noteVal);
+  } else if (_bb2.mode == mnseq && _b2Btnr.isHeld()) {
+    _display.print(_bb2.noteVal);
+  } else if (_bb3.mode == mnseq && _b3Btnr.isHeld()) {
+    _display.print(_bb3.noteVal);
+  } else if (_bb4.mode == mnseq && _b4Btnr.isHeld()) {
+    _display.print(_bb4.noteVal);
+  } else if (_bb5.mode == mnseq && _b5Btnr.isHeld()) {
+    _display.print(_bb5.noteVal);
+  } else if (_bb6.mode == mnseq && _b6Btnr.isHeld()) {
+    _display.print(_bb6.noteVal);
+  } else if (_bb7.mode == mnseq && _b7Btnr.isHeld()) {
+    _display.print(_bb7.noteVal);
+  } else if (_bb0.mode == mnseq) {
+    _display.print(_seqNote);
+  } else {
+    _display.print(_renc_pitch_val);
+  }
 
   _display.setCursor(5.55 * (marX + btnSz) + encRad, _display.height() / 2 - 15);
   switch(_bb0.mode) {

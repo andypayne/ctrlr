@@ -130,6 +130,14 @@ class Ctrlr
     long _sw_millis;
 
     Buttoner _rencBtnr;
+    Buttoner _b0Btnr;
+    Buttoner _b1Btnr;
+    Buttoner _b2Btnr;
+    Buttoner _b3Btnr;
+    Buttoner _b4Btnr;
+    Buttoner _b5Btnr;
+    Buttoner _b6Btnr;
+    Buttoner _b7Btnr;
 
     Bounce _btn0;
     Bounce _btn1;
@@ -176,6 +184,7 @@ class Ctrlr
     int _btn5_seq;
     int _btn6_seq;
     int _btn7_seq;
+    int _seqNote;
 };
 
 #endif
