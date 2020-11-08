@@ -31,14 +31,14 @@ Ctrlr::Ctrlr(
     _btn5(in5Pin, 5),
     _btn6(in6Pin, 5),
     _btn7(in7Pin, 5),
-    _bb0({ defBtnMode, 60, 20, MIDI_HIGH }),
-    _bb1({ defBtnMode, 61, 21, MIDI_HIGH }),
-    _bb2({ defBtnMode, 62, 22, MIDI_HIGH }),
-    _bb3({ defBtnMode, 63, 23, MIDI_HIGH }),
-    _bb4({ defBtnMode, 64, 24, MIDI_HIGH }),
-    _bb5({ defBtnMode, 65, 25, MIDI_HIGH }),
-    _bb6({ defBtnMode, 66, 26, MIDI_HIGH }),
-    _bb7({ defBtnMode, 67, 27, MIDI_HIGH }),
+    _bb0({ defBtnMode, 60, 20, MidiDefs::MIDI_HIGH }),
+    _bb1({ defBtnMode, 61, 21, MidiDefs::MIDI_HIGH }),
+    _bb2({ defBtnMode, 62, 22, MidiDefs::MIDI_HIGH }),
+    _bb3({ defBtnMode, 63, 23, MidiDefs::MIDI_HIGH }),
+    _bb4({ defBtnMode, 64, 24, MidiDefs::MIDI_HIGH }),
+    _bb5({ defBtnMode, 65, 25, MidiDefs::MIDI_HIGH }),
+    _bb6({ defBtnMode, 66, 26, MidiDefs::MIDI_HIGH }),
+    _bb7({ defBtnMode, 67, 27, MidiDefs::MIDI_HIGH }),
     _btn0_tog(HIGH),
     _btn1_tog(HIGH),
     _btn2_tog(HIGH),
@@ -344,7 +344,7 @@ void Ctrlr::update() {
         usbMIDI.sendControlChange(bb.ctlNum, bb.ctlVal, midiChannel);
       }
     } else if (bb.mode == mcchg2) {
-      int ctlVal = fall ? bb.ctlVal : MIDI_LOW;
+      int ctlVal = fall ? bb.ctlVal : MidiDefs::MIDI_LOW;
       usbMIDI.sendControlChange(bb.ctlNum, ctlVal, midiChannel);
     } else if (bb.mode == mcchg3 && (long)(millis() - btnTime) >= swMillis) {
       btnTog = (btnTog == LOW) ? HIGH : LOW;
@@ -364,7 +364,7 @@ void Ctrlr::update() {
         usbMIDI.sendControlChange(bb.ctlNum, bb.ctlVal, midiChannel);
       }
     } else if (bb.mode == mcchg2) {
-      int ctlVal = fall ? bb.ctlVal : MIDI_LOW;
+      int ctlVal = fall ? bb.ctlVal : MidiDefs::MIDI_LOW;
       usbMIDI.sendControlChange(bb.ctlNum, ctlVal, midiChannel);
     } else if (bb.mode == mcchg3 && (long)(millis() - btnTime) >= swMillis) {
       btnTog = (btnTog == LOW) ? HIGH : LOW;
@@ -384,7 +384,7 @@ void Ctrlr::update() {
         usbMIDI.sendControlChange(bb.ctlNum, bb.ctlVal, midiChannel);
       }
     } else if (bb.mode == mcchg2) {
-      int ctlVal = fall ? bb.ctlVal : MIDI_LOW;
+      int ctlVal = fall ? bb.ctlVal : MidiDefs::MIDI_LOW;
       usbMIDI.sendControlChange(bb.ctlNum, ctlVal, midiChannel);
     } else if (bb.mode == mcchg3 && (long)(millis() - btnTime) >= swMillis) {
       btnTog = (btnTog == LOW) ? HIGH : LOW;
@@ -404,7 +404,7 @@ void Ctrlr::update() {
         usbMIDI.sendControlChange(bb.ctlNum, bb.ctlVal, midiChannel);
       }
     } else if (bb.mode == mcchg2) {
-      int ctlVal = fall ? bb.ctlVal : MIDI_LOW;
+      int ctlVal = fall ? bb.ctlVal : MidiDefs::MIDI_LOW;
       usbMIDI.sendControlChange(bb.ctlNum, ctlVal, midiChannel);
     } else if (bb.mode == mcchg3 && (long)(millis() - btnTime) >= swMillis) {
       btnTog = (btnTog == LOW) ? HIGH : LOW;
@@ -424,7 +424,7 @@ void Ctrlr::update() {
         usbMIDI.sendControlChange(bb.ctlNum, bb.ctlVal, midiChannel);
       }
     } else if (bb.mode == mcchg2) {
-      int ctlVal = fall ? bb.ctlVal : MIDI_LOW;
+      int ctlVal = fall ? bb.ctlVal : MidiDefs::MIDI_LOW;
       usbMIDI.sendControlChange(bb.ctlNum, ctlVal, midiChannel);
     } else if (bb.mode == mcchg3 && (long)(millis() - btnTime) >= swMillis) {
       btnTog = (btnTog == LOW) ? HIGH : LOW;
@@ -444,7 +444,7 @@ void Ctrlr::update() {
         usbMIDI.sendControlChange(bb.ctlNum, bb.ctlVal, midiChannel);
       }
     } else if (bb.mode == mcchg2) {
-      int ctlVal = fall ? bb.ctlVal : MIDI_LOW;
+      int ctlVal = fall ? bb.ctlVal : MidiDefs::MIDI_LOW;
       usbMIDI.sendControlChange(bb.ctlNum, ctlVal, midiChannel);
     } else if (bb.mode == mcchg3 && (long)(millis() - btnTime) >= swMillis) {
       btnTog = (btnTog == LOW) ? HIGH : LOW;
@@ -464,7 +464,7 @@ void Ctrlr::update() {
         usbMIDI.sendControlChange(bb.ctlNum, bb.ctlVal, midiChannel);
       }
     } else if (bb.mode == mcchg2) {
-      int ctlVal = fall ? bb.ctlVal : MIDI_LOW;
+      int ctlVal = fall ? bb.ctlVal : MidiDefs::MIDI_LOW;
       usbMIDI.sendControlChange(bb.ctlNum, ctlVal, midiChannel);
     } else if (bb.mode == mcchg3 && (long)(millis() - btnTime) >= swMillis) {
       btnTog = (btnTog == LOW) ? HIGH : LOW;
@@ -484,7 +484,7 @@ void Ctrlr::update() {
         usbMIDI.sendControlChange(bb.ctlNum, bb.ctlVal, midiChannel);
       }
     } else if (bb.mode == mcchg2) {
-      int ctlVal = fall ? bb.ctlVal : MIDI_LOW;
+      int ctlVal = fall ? bb.ctlVal : MidiDefs::MIDI_LOW;
       usbMIDI.sendControlChange(bb.ctlNum, ctlVal, midiChannel);
     } else if (bb.mode == mcchg3 && (long)(millis() - btnTime) >= swMillis) {
       btnTog = (btnTog == LOW) ? HIGH : LOW;
@@ -741,23 +741,23 @@ void Ctrlr::displayControllerView() {
   _display.setTextColor(SSD1306_WHITE);
   _display.setCursor(5.55 * (marX + btnSz) + encRad, _display.height() / 2 - 3);
   if (_bb0.mode == mnseq && _b0Btnr.isHeld()) {
-    _display.print(_bb0.noteVal);
+    _display.print(F(MidiDefs::noteNames(_bb0.noteVal)));
   } else if (_bb1.mode == mnseq && _b1Btnr.isHeld()) {
-    _display.print(_bb1.noteVal);
+    _display.print(F(MidiDefs::noteNames(_bb1.noteVal)));
   } else if (_bb2.mode == mnseq && _b2Btnr.isHeld()) {
-    _display.print(_bb2.noteVal);
+    _display.print(F(MidiDefs::noteNames(_bb2.noteVal)));
   } else if (_bb3.mode == mnseq && _b3Btnr.isHeld()) {
-    _display.print(_bb3.noteVal);
+    _display.print(F(MidiDefs::noteNames(_bb3.noteVal)));
   } else if (_bb4.mode == mnseq && _b4Btnr.isHeld()) {
-    _display.print(_bb4.noteVal);
+    _display.print(F(MidiDefs::noteNames(_bb4.noteVal)));
   } else if (_bb5.mode == mnseq && _b5Btnr.isHeld()) {
-    _display.print(_bb5.noteVal);
+    _display.print(F(MidiDefs::noteNames(_bb5.noteVal)));
   } else if (_bb6.mode == mnseq && _b6Btnr.isHeld()) {
-    _display.print(_bb6.noteVal);
+    _display.print(F(MidiDefs::noteNames(_bb6.noteVal)));
   } else if (_bb7.mode == mnseq && _b7Btnr.isHeld()) {
-    _display.print(_bb7.noteVal);
+    _display.print(F(MidiDefs::noteNames(_bb7.noteVal)));
   } else if (_bb0.mode == mnseq) {
-    _display.print(_seqNote);
+    _display.print(F(MidiDefs::noteNames(_seqNote)));
   } else {
     _display.print(_renc_pitch_val);
   }

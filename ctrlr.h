@@ -20,6 +20,7 @@
 // https://playground.arduino.cc/Code/Metro/
 #include <Metro.h>
 
+#include "../../midi_defs/midi_defs.h"
 #include "../../buttoner/buttoner.h"
 
 // SSD1306 128x32 panel
@@ -38,9 +39,6 @@
 
 #define VEL_NOTE_ON   99
 #define VEL_NOTE_OFF  0
-
-#define MIDI_HIGH 127
-#define MIDI_LOW    0
 
 #define MODE_CHG_CTL_NUM  28
 
