@@ -9,10 +9,6 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 
-// PJRC Bounce Library
-// https://www.pjrc.com/teensy/td_libs_Bounce.html
-#include <Bounce.h>
-
 // PJRC Encoder Library
 // https://www.pjrc.com/teensy/td_libs_Encoder.html
 #include <Encoder.h>
@@ -70,8 +66,6 @@ class Ctrlr
       int ctlVal;
     };
 
-    using btnCallback = void (*)(Bounce& btn, const btnBehavior& bb, int& pinVal, int& btnTog, int& btnSeq, long& btnTime, const long& swMillis, const int& midiChannel, const bool fall);
-
     Ctrlr(
       int midiChannel,
       int in0Pin,
@@ -95,7 +89,7 @@ class Ctrlr
     void drawRencIndicator(const float indX, const float indY, const float rencX, const float rencY);
     void displayControllerView();
     void displayButtonStatus(const int pinVal, const int btnTog, const int btnX, const int btnY, const float btnSz, const float btnRad);
-    void btnOnEdge(Bounce &btn, const btnBehavior& bb, int& pinVal, int& btnTog, int& btnSeq, long& btnTime, const long& swMillis, const int& midiChannel, btnCallback cb);
+    void processBtn(const btnBehavior& bb, Buttoner& bBtnr, int& pinVal, int& btnTog, int& btnSeq, long& btnTime);
 
   private:
     // the MIDI channel number to send messages
@@ -137,14 +131,6 @@ class Ctrlr
     Buttoner _b6Btnr;
     Buttoner _b7Btnr;
 
-    Bounce _btn0;
-    Bounce _btn1;
-    Bounce _btn2;
-    Bounce _btn3;
-    Bounce _btn4;
-    Bounce _btn5;
-    Bounce _btn6;
-    Bounce _btn7;
     btnBehavior _bb0;
     btnBehavior _bb1;
     btnBehavior _bb2;
