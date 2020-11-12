@@ -54,8 +54,12 @@ class Ctrlr
       mcchg,
       mcchg2,  // Send MIDI_LOW on release
       mcchg3,  // Repeat mode
-      mnseq    // Note sequencer mode
+      mnseq,   // Note sequencer mode
     };
+    const int NUM_BTN_MODES = 5;
+
+    // Damping increment for the rotary encoder mode change
+    const int DAMP_INCR = 5;
 
     btnMode defBtnMode = mnote;
 
@@ -91,6 +95,7 @@ class Ctrlr
     void displayDebugView();
     void displayButtonStatus(const int pinVal, const int btnTog, const int btnX, const int btnY, const float btnSz, const float btnRad);
     void processBtn(const btnBehavior& bb, Buttoner& bBtnr, int& pinVal, int& btnTog, int& btnSeq, long& btnTime);
+    const btnMode relativeMode(const btnMode& mode, const int relVal);
 
   private:
     // the MIDI channel number to send messages
@@ -119,6 +124,8 @@ class Ctrlr
     int _renc_sw_val;
     long _renc_val;
     long _renc_pitch_val;
+    bool _modeChanging;
+    btnMode _modeSel;
     long _renc_sw_time;
     long _sw_millis;
 

@@ -13,6 +13,8 @@ Ctrlr::Ctrlr(
   int inRencSwitch,
   int inRencDT,
   int inRencCLK) :
+    _modeChanging(false),
+    _modeSel(mnote),
     _sw_millis(SW_MILLIS),
     _rencBtnr(HIGH, LOW, HIGH, SW_MILLIS, SW_DBL_MILLIS),
     _b0Btnr(HIGH, LOW, HIGH, SW_MILLIS, SW_DBL_MILLIS),
@@ -251,6 +253,16 @@ int cycleBtnSeq(const int btnSeq) {
   }
 }
 
+const Ctrlr::btnMode Ctrlr::relativeMode(const Ctrlr::btnMode& mode, const int relVal) {
+  if (mode + relVal >= 0) {
+    return (btnMode)(((int)mode + relVal) % NUM_BTN_MODES);
+  } else {
+    // modulo of a negative number - this works as expected in C but not in Ruby or Python
+    // See: https://torstencurdt.com/tech/posts/modulo-of-negative-numbers/
+    return (btnMode)((((int)mode + relVal) % NUM_BTN_MODES) + NUM_BTN_MODES);
+  }
+}
+
 void Ctrlr::update() {
   _renc_sw_val = digitalRead(_inRencSwitch);
   _rencBtnr.setVal(_renc_sw_val);
@@ -441,68 +453,95 @@ void Ctrlr::update() {
   }
 
   long new_renc_val = _renc.read();
-  if (_bb0.mode == mnseq && _b0Btnr.isHeld()) {
-    // Note val
+  if (_rencBtnr.isHeld()) {
+    _modeChanging = true;
     if (new_renc_val != _renc_val) {
-      _bb0.noteVal += (new_renc_val - _renc_val);
-      _renc_val = new_renc_val;
+      int dampedVal = 0;
+      if (new_renc_val > DAMP_INCR + _renc_val) {
+        dampedVal = 1;
+      } else if (new_renc_val < _renc_val - DAMP_INCR) {
+        dampedVal = -1;
+      }
+      if (dampedVal != 0) {
+        _modeSel = relativeMode(_modeSel, new_renc_val > _renc_val ? 1 : -1);
+        _renc_val = new_renc_val;
+      }
     }
-  } else if (_bb1.mode == mnseq && _b1Btnr.isHeld()) {
-    // Note val
-    if (new_renc_val != _renc_val) {
-      _bb1.noteVal += (new_renc_val - _renc_val);
-      _renc_val = new_renc_val;
-    }
-  } else if (_bb2.mode == mnseq && _b2Btnr.isHeld()) {
-    // Note val
-    if (new_renc_val != _renc_val) {
-      _bb2.noteVal += (new_renc_val - _renc_val);
-      _renc_val = new_renc_val;
-    }
-  } else if (_bb3.mode == mnseq && _b3Btnr.isHeld()) {
-    // Note val
-    if (new_renc_val != _renc_val) {
-      _bb3.noteVal += (new_renc_val - _renc_val);
-      _renc_val = new_renc_val;
-    }
-  } else if (_bb4.mode == mnseq && _b4Btnr.isHeld()) {
-    // Note val
-    if (new_renc_val != _renc_val) {
-      _bb4.noteVal += (new_renc_val - _renc_val);
-      _renc_val = new_renc_val;
-    }
-  } else if (_bb5.mode == mnseq && _b5Btnr.isHeld()) {
-    // Note val
-    if (new_renc_val != _renc_val) {
-      _bb5.noteVal += (new_renc_val - _renc_val);
-      _renc_val = new_renc_val;
-    }
-  } else if (_bb6.mode == mnseq && _b6Btnr.isHeld()) {
-    // Note val
-    if (new_renc_val != _renc_val) {
-      _bb6.noteVal += (new_renc_val - _renc_val);
-      _renc_val = new_renc_val;
-    }
-  } else if (_bb7.mode == mnseq && _b7Btnr.isHeld()) {
-    // Note val
-    if (new_renc_val != _renc_val) {
-      _bb7.noteVal += (new_renc_val - _renc_val);
-      _renc_val = new_renc_val;
-    }
-  } else if ((_bb0.mode == mcchg3 && _pin0_val == LOW) || _bb0.mode == mnseq) {
-    // Tempo mode
-    if (new_renc_val != _renc_val) {
-      _metroBpm = _metroBpm + (new_renc_val - _renc_val);
-      _metro.interval(BPM_TO_MILLIS(_metroBpm));
-      _metro.reset();
-      _renc_val = new_renc_val;
-    }
+  } else if (_rencBtnr.isHoldReleased()) {
+    _modeChanging = false;
+    // Change the mode for all buttons
+    _bb0.mode = _modeSel;
+    _bb1.mode = _modeSel;
+    _bb2.mode = _modeSel;
+    _bb3.mode = _modeSel;
+    _bb4.mode = _modeSel;
+    _bb5.mode = _modeSel;
+    _bb6.mode = _modeSel;
+    _bb7.mode = _modeSel;
   } else {
-    // Pitch bend mode
-    if (new_renc_val != _renc_val) {
-      _renc_pitch_val = _renc_pitch_val + (new_renc_val - _renc_val);
-      usbMIDI.sendPitchBend(_renc_pitch_val, _midiChannel);
-      _renc_val = new_renc_val;
+    if (_bb0.mode == mnseq && _b0Btnr.isHeld()) {
+      // Note val
+      if (new_renc_val != _renc_val) {
+        _bb0.noteVal += (new_renc_val - _renc_val);
+        _renc_val = new_renc_val;
+      }
+    } else if (_bb1.mode == mnseq && _b1Btnr.isHeld()) {
+      // Note val
+      if (new_renc_val != _renc_val) {
+        _bb1.noteVal += (new_renc_val - _renc_val);
+        _renc_val = new_renc_val;
+      }
+    } else if (_bb2.mode == mnseq && _b2Btnr.isHeld()) {
+      // Note val
+      if (new_renc_val != _renc_val) {
+        _bb2.noteVal += (new_renc_val - _renc_val);
+        _renc_val = new_renc_val;
+      }
+    } else if (_bb3.mode == mnseq && _b3Btnr.isHeld()) {
+      // Note val
+      if (new_renc_val != _renc_val) {
+        _bb3.noteVal += (new_renc_val - _renc_val);
+        _renc_val = new_renc_val;
+      }
+    } else if (_bb4.mode == mnseq && _b4Btnr.isHeld()) {
+      // Note val
+      if (new_renc_val != _renc_val) {
+        _bb4.noteVal += (new_renc_val - _renc_val);
+        _renc_val = new_renc_val;
+      }
+    } else if (_bb5.mode == mnseq && _b5Btnr.isHeld()) {
+      // Note val
+      if (new_renc_val != _renc_val) {
+        _bb5.noteVal += (new_renc_val - _renc_val);
+        _renc_val = new_renc_val;
+      }
+    } else if (_bb6.mode == mnseq && _b6Btnr.isHeld()) {
+      // Note val
+      if (new_renc_val != _renc_val) {
+        _bb6.noteVal += (new_renc_val - _renc_val);
+        _renc_val = new_renc_val;
+      }
+    } else if (_bb7.mode == mnseq && _b7Btnr.isHeld()) {
+      // Note val
+      if (new_renc_val != _renc_val) {
+        _bb7.noteVal += (new_renc_val - _renc_val);
+        _renc_val = new_renc_val;
+      }
+    } else if ((_bb0.mode == mcchg3 && _pin0_val == LOW) || _bb0.mode == mnseq) {
+      // Tempo mode
+      if (new_renc_val != _renc_val) {
+        _metroBpm = _metroBpm + (new_renc_val - _renc_val);
+        _metro.interval(BPM_TO_MILLIS(_metroBpm));
+        _metro.reset();
+        _renc_val = new_renc_val;
+      }
+    } else if (!_modeChanging) {
+      // Pitch bend mode
+      if (new_renc_val != _renc_val) {
+        _renc_pitch_val = _renc_pitch_val + (new_renc_val - _renc_val);
+        usbMIDI.sendPitchBend(_renc_pitch_val, _midiChannel);
+        _renc_val = new_renc_val;
+      }
     }
   }
 
@@ -596,14 +635,14 @@ void Ctrlr::displayControllerView() {
     _display.drawCircle(rencX, rencY, 0.5 * encRad, SSD1306_WHITE);
   }
 
-  // Pitch renc
-  if (_bb0.mode != mnseq) {
+  if (!_modeChanging && _bb0.mode != mnseq) {
+    // Pitch renc
     float indPitchX = encRad * cos(2 * PI * _renc_pitch_val / 80.0 - PI / 2);
     float indPitchY = encRad * sin(2 * PI * _renc_pitch_val / 80.0 - PI / 2);
     drawRencIndicator(indPitchX, indPitchY, rencX, rencY);
   }
 
-  if ((_bb0.mode == mcchg3 && _pin0_val == LOW) || _bb0.mode == mnseq) {
+  if (!_modeChanging && ((_bb0.mode == mcchg3 && _pin0_val == LOW) || _bb0.mode == mnseq)) {
     // Metro renc
     float indMetroX = encRad * cos(2 * PI * _metroBpm / 80.0 - PI / 2);
     float indMetroY = encRad * sin(2 * PI * _metroBpm / 80.0 - PI / 2);
@@ -636,24 +675,46 @@ void Ctrlr::displayControllerView() {
   }
 
   _display.setCursor(5.55 * (marX + btnSz) + encRad, _display.height() / 2 - 15);
-  switch(_bb0.mode) {
-    case mnote:
-      _display.print(F("N"));
-      break;
-    case mcchg:
-      _display.print(F("C1"));
-      break;
-    case mcchg2:
-      _display.print(F("C2"));
-      break;
-    case mcchg3:
-      _display.print(F("C3"));
-      break;
-    case mnseq:
-      _display.print(F("NS"));
-      break;
-    default:
-      break;
+  if (_modeChanging) {
+    switch(_modeSel) {
+      case mnote:
+        _display.print(F("N"));
+        break;
+      case mcchg:
+        _display.print(F("C1"));
+        break;
+      case mcchg2:
+        _display.print(F("C2"));
+        break;
+      case mcchg3:
+        _display.print(F("C3"));
+        break;
+      case mnseq:
+        _display.print(F("NS"));
+        break;
+      default:
+        break;
+    }
+  } else {
+    switch(_bb0.mode) {
+      case mnote:
+        _display.print(F("N"));
+        break;
+      case mcchg:
+        _display.print(F("C1"));
+        break;
+      case mcchg2:
+        _display.print(F("C2"));
+        break;
+      case mcchg3:
+        _display.print(F("C3"));
+        break;
+      case mnseq:
+        _display.print(F("NS"));
+        break;
+      default:
+        break;
+    }
   }
 
   if (_bb0.mode == mcchg3 || _bb0.mode == mnseq) {
