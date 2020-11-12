@@ -218,9 +218,10 @@ void Ctrlr::processBtn(const btnBehavior& bb, Buttoner& bBtnr, int& pinVal, int&
       btnTime = millis();
     }
   } else if (bb.mode == mnseq) {
-    if (bBtnr.isPressedDown()) {
+    if (bBtnr.isSinglePressed()) {
       pinVal = LOW;
       btnSeq = cycleBtnSeq(btnSeq);
+//    } else if (bBtnr.isSingleReleased()) {
     } else if (bBtnr.isReleased()) {
       pinVal = HIGH;
     }
@@ -354,6 +355,10 @@ void Ctrlr::update() {
   _b6Btnr.update();
   _b7Btnr.setVal(digitalRead(_in7Pin));
   _b7Btnr.update();
+
+  // DEBUG
+  //printBtnStatus("b0- ", _b0Btnr);
+  //printBtnStatus("b3- ", _b3Btnr);
 
   processBtn(_bb0, _b0Btnr, _pin0_val, _btn0_tog, _btn0_seq, _btn0_time);
   processBtn(_bb1, _b1Btnr, _pin1_val, _btn1_tog, _btn1_seq, _btn1_time);
@@ -664,6 +669,14 @@ void Ctrlr::displayButtonStatus(const int pinVal, const int btnTog, const int bt
     _display.fillRoundRect(btnX, btnY, btnSz, btnSz, btnRad, SSD1306_WHITE);
   } else {
     _display.drawRoundRect(btnX, btnY, btnSz, btnSz, btnRad, SSD1306_WHITE);
+  }
+}
+
+void Ctrlr::printBtnStatus(const char *pre, Buttoner& bBtnr) {
+  const char *bStatus = bBtnr.statusToStr();
+  if (strcmp(bStatus, "")) {
+    Serial.print(pre);
+    Serial.println(bStatus);
   }
 }
 

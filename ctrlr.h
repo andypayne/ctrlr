@@ -85,9 +85,10 @@ class Ctrlr
     void update();
     void displayBootScreen();
     void drawBootRect(const int x, const int y, const int delayMs);
-    void displayDebugView();
     void drawRencIndicator(const float indX, const float indY, const float rencX, const float rencY);
     void displayControllerView();
+    void printBtnStatus(const char *pre, Buttoner& bBtnr);
+    void displayDebugView();
     void displayButtonStatus(const int pinVal, const int btnTog, const int btnX, const int btnY, const float btnSz, const float btnRad);
     void processBtn(const btnBehavior& bb, Buttoner& bBtnr, int& pinVal, int& btnTog, int& btnSeq, long& btnTime);
 
