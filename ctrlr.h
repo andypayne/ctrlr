@@ -61,6 +61,11 @@ class Ctrlr
     // Damping increment for the rotary encoder mode change
     const int DAMP_INCR = 5;
 
+    // Delay repeat max
+    const int MAX_REP_COUNT = 16;
+    // Default delay BPM
+    const int DEF_REP_BPM = 500;
+
     btnMode defBtnMode = mnote;
 
     struct btnBehavior {
@@ -68,6 +73,8 @@ class Ctrlr
       int noteVal;
       int ctlNum;
       int ctlVal;
+      int repCount;
+      Metro repMetro;
     };
 
     Ctrlr(
@@ -94,8 +101,9 @@ class Ctrlr
     void printBtnStatus(const char *pre, Buttoner& bBtnr);
     void displayDebugView();
     void displayButtonStatus(const int pinVal, const int btnTog, const int btnX, const int btnY, const float btnSz, const float btnRad);
-    void processBtn(const btnBehavior& bb, Buttoner& bBtnr, int& pinVal, int& btnTog, int& btnSeq, long& btnTime);
+    void processBtn(btnBehavior& bb, Buttoner& bBtnr, int& pinVal, int& btnTog, int& btnSeq, long& btnTime);
     const btnMode relativeMode(const btnMode& mode, const int relVal);
+    void doRepeats(btnBehavior& bb);
 
   private:
     // the MIDI channel number to send messages
@@ -177,6 +185,7 @@ class Ctrlr
     int _btn6_seq;
     int _btn7_seq;
     int _seqNote;
+    bool _delayOn;
 };
 
 #endif

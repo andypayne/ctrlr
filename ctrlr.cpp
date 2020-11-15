@@ -25,14 +25,14 @@ Ctrlr::Ctrlr(
     _b5Btnr(HIGH, LOW, HIGH, SW_MILLIS, SW_DBL_MILLIS),
     _b6Btnr(HIGH, LOW, HIGH, SW_MILLIS, SW_DBL_MILLIS),
     _b7Btnr(HIGH, LOW, HIGH, SW_MILLIS, SW_DBL_MILLIS),
-    _bb0({ defBtnMode, 60, 20, MidiDefs::MIDI_HIGH }),
-    _bb1({ defBtnMode, 61, 21, MidiDefs::MIDI_HIGH }),
-    _bb2({ defBtnMode, 62, 22, MidiDefs::MIDI_HIGH }),
-    _bb3({ defBtnMode, 63, 23, MidiDefs::MIDI_HIGH }),
-    _bb4({ defBtnMode, 64, 24, MidiDefs::MIDI_HIGH }),
-    _bb5({ defBtnMode, 65, 25, MidiDefs::MIDI_HIGH }),
-    _bb6({ defBtnMode, 66, 26, MidiDefs::MIDI_HIGH }),
-    _bb7({ defBtnMode, 67, 27, MidiDefs::MIDI_HIGH }),
+    _bb0({ defBtnMode, 60, 20, MidiDefs::MIDI_HIGH, 0, Metro(BPM_TO_MILLIS(DEF_REP_BPM)) }),
+    _bb1({ defBtnMode, 61, 21, MidiDefs::MIDI_HIGH, 0, Metro(BPM_TO_MILLIS(DEF_REP_BPM)) }),
+    _bb2({ defBtnMode, 62, 22, MidiDefs::MIDI_HIGH, 0, Metro(BPM_TO_MILLIS(DEF_REP_BPM)) }),
+    _bb3({ defBtnMode, 63, 23, MidiDefs::MIDI_HIGH, 0, Metro(BPM_TO_MILLIS(DEF_REP_BPM)) }),
+    _bb4({ defBtnMode, 64, 24, MidiDefs::MIDI_HIGH, 0, Metro(BPM_TO_MILLIS(DEF_REP_BPM)) }),
+    _bb5({ defBtnMode, 65, 25, MidiDefs::MIDI_HIGH, 0, Metro(BPM_TO_MILLIS(DEF_REP_BPM)) }),
+    _bb6({ defBtnMode, 66, 26, MidiDefs::MIDI_HIGH, 0, Metro(BPM_TO_MILLIS(DEF_REP_BPM)) }),
+    _bb7({ defBtnMode, 67, 27, MidiDefs::MIDI_HIGH, 0, Metro(BPM_TO_MILLIS(DEF_REP_BPM)) }),
     _btn0_tog(HIGH),
     _btn1_tog(HIGH),
     _btn2_tog(HIGH),
@@ -52,7 +52,8 @@ Ctrlr::Ctrlr(
       OLED_CS),
     _metroBpm(METRO_BPM),
     _metro(BPM_TO_MILLIS(METRO_BPM)),
-    _seqNote(0)
+    _seqNote(0),
+    _delayOn(false)
 {
   _midiChannel = midiChannel;
   _in0Pin = in0Pin;
@@ -185,14 +186,19 @@ void Ctrlr::drawBootRect(const int x, const int y, const int delayMs) {
   delay(delayMs);
 }
 
-void Ctrlr::processBtn(const btnBehavior& bb, Buttoner& bBtnr, int& pinVal, int& btnTog, int& btnSeq, long& btnTime) {
+void Ctrlr::processBtn(btnBehavior& bb, Buttoner& bBtnr, int& pinVal, int& btnTog, int& btnSeq, long& btnTime) {
   if (bb.mode == mnote) {
     if (bBtnr.isPressedDown()) {
       pinVal = LOW;
+      if (_delayOn) {
+        bb.repCount = MAX_REP_COUNT;
+        bb.repMetro.interval(BPM_TO_MILLIS(DEF_REP_BPM));
+        bb.repMetro.reset();
+      }
       usbMIDI.sendNoteOn(bb.noteVal, VEL_NOTE_ON, _midiChannel);
     } else if (bBtnr.isReleased()) {
       pinVal = HIGH;
-      usbMIDI.sendNoteOn(bb.noteVal, VEL_NOTE_OFF, _midiChannel);
+      //usbMIDI.sendNoteOn(bb.noteVal, VEL_NOTE_OFF, _midiChannel);
     }
   } else if (bb.mode == mcchg) {
     if (bBtnr.isPressedDown()) {
@@ -263,9 +269,38 @@ const Ctrlr::btnMode Ctrlr::relativeMode(const Ctrlr::btnMode& mode, const int r
   }
 }
 
+void Ctrlr::doRepeats(btnBehavior& bb) {
+  if (bb.mode == mnote && bb.repCount > 0) {
+    if (bb.repMetro.check() == 1) {
+      //if (bb.repCount % 2 == 0) {
+        float vel = VEL_NOTE_ON * (log(10)/(2 * (float)(2 * (1 + MAX_REP_COUNT - bb.repCount))) - 0.025 * 20.0 / MAX_REP_COUNT);
+        //Serial.println(vel);
+        usbMIDI.sendNoteOn(bb.noteVal, vel, _midiChannel);
+      //} else {
+      //  usbMIDI.sendNoteOn(bb.noteVal, VEL_NOTE_OFF, _midiChannel);
+      //}
+      bb.repCount -= 1;
+      if (bb.repCount == 0) {
+        usbMIDI.sendNoteOn(bb.noteVal, VEL_NOTE_OFF, _midiChannel);
+      }
+    }
+  }
+}
+
 void Ctrlr::update() {
   _renc_sw_val = digitalRead(_inRencSwitch);
   _rencBtnr.setVal(_renc_sw_val);
+
+  if (_delayOn) {
+    doRepeats(_bb0);
+    doRepeats(_bb1);
+    doRepeats(_bb2);
+    doRepeats(_bb3);
+    doRepeats(_bb4);
+    doRepeats(_bb5);
+    doRepeats(_bb6);
+    doRepeats(_bb7);
+  }
 
   if (_bb0.mode == mcchg3 && _metro.check() == 1) {
     if (_btn0_tog == LOW) {
@@ -384,11 +419,12 @@ void Ctrlr::update() {
   _rencBtnr.update();
 
   if (_rencBtnr.isSinglePressed()) {
-    //Serial.println("_SINGLE_");
+    if (_modeSel == mnote) {
+      _delayOn = !_delayOn;
+    }
   }
   if (_rencBtnr.isDoublePressed()) {
-      // Switch mode
-    //Serial.println("_DOUBLE_");
+    // Switch mode
     switch(_bb0.mode) {
       case mnote:
         _bb0.mode = mcchg;
@@ -699,6 +735,9 @@ void Ctrlr::displayControllerView() {
     switch(_bb0.mode) {
       case mnote:
         _display.print(F("N"));
+        if (_delayOn) {
+          _display.print(F(" DL"));
+        }
         break;
       case mcchg:
         _display.print(F("C1"));
