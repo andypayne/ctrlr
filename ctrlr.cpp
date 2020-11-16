@@ -25,14 +25,14 @@ Ctrlr::Ctrlr(
     _b5Btnr(HIGH, LOW, HIGH, SW_MILLIS, SW_DBL_MILLIS),
     _b6Btnr(HIGH, LOW, HIGH, SW_MILLIS, SW_DBL_MILLIS),
     _b7Btnr(HIGH, LOW, HIGH, SW_MILLIS, SW_DBL_MILLIS),
-    _bb0({ defBtnMode, 60, maj_triad(60), 20, MidiDefs::MIDI_HIGH, 0, Metro(BPM_TO_MILLIS(DEF_REP_BPM)) }),  // Cmaj
-    _bb1({ defBtnMode, 61, min_triad(62), 21, MidiDefs::MIDI_HIGH, 0, Metro(BPM_TO_MILLIS(DEF_REP_BPM)) }),  // Dmin
-    _bb2({ defBtnMode, 62, min_triad(64), 22, MidiDefs::MIDI_HIGH, 0, Metro(BPM_TO_MILLIS(DEF_REP_BPM)) }),  // Emin
-    _bb3({ defBtnMode, 63, maj_triad(65), 23, MidiDefs::MIDI_HIGH, 0, Metro(BPM_TO_MILLIS(DEF_REP_BPM)) }),  // Fmaj
-    _bb4({ defBtnMode, 64, maj_triad(67), 24, MidiDefs::MIDI_HIGH, 0, Metro(BPM_TO_MILLIS(DEF_REP_BPM)) }),  // Gmaj
-    _bb5({ defBtnMode, 65, min_triad(69), 25, MidiDefs::MIDI_HIGH, 0, Metro(BPM_TO_MILLIS(DEF_REP_BPM)) }),  // Amin
-    _bb6({ defBtnMode, 66, dim_triad(71), 26, MidiDefs::MIDI_HIGH, 0, Metro(BPM_TO_MILLIS(DEF_REP_BPM)) }),  // Bdim
-    _bb7({ defBtnMode, 67, maj_triad(72), 27, MidiDefs::MIDI_HIGH, 0, Metro(BPM_TO_MILLIS(DEF_REP_BPM)) }),  // Cmaj
+    _bb0({ defBtnMode, 60, maj_7(60), 20, MidiDefs::MIDI_HIGH, 0, Metro(BPM_TO_MILLIS(DEF_REP_BPM)) }),  // Cmaj
+    _bb1({ defBtnMode, 61, min_7(62), 21, MidiDefs::MIDI_HIGH, 0, Metro(BPM_TO_MILLIS(DEF_REP_BPM)) }),  // Dmin
+    _bb2({ defBtnMode, 62, min_7(64), 22, MidiDefs::MIDI_HIGH, 0, Metro(BPM_TO_MILLIS(DEF_REP_BPM)) }),  // Emin
+    _bb3({ defBtnMode, 63, maj_7(65), 23, MidiDefs::MIDI_HIGH, 0, Metro(BPM_TO_MILLIS(DEF_REP_BPM)) }),  // Fmaj
+    _bb4({ defBtnMode, 64, dom_7(67), 24, MidiDefs::MIDI_HIGH, 0, Metro(BPM_TO_MILLIS(DEF_REP_BPM)) }),  // Gmaj
+    _bb5({ defBtnMode, 65, min_7(69), 25, MidiDefs::MIDI_HIGH, 0, Metro(BPM_TO_MILLIS(DEF_REP_BPM)) }),  // Amin
+    _bb6({ defBtnMode, 66, dim_7(71), 26, MidiDefs::MIDI_HIGH, 0, Metro(BPM_TO_MILLIS(DEF_REP_BPM)) }),  // Bdim
+    _bb7({ defBtnMode, 67, maj_7(72), 27, MidiDefs::MIDI_HIGH, 0, Metro(BPM_TO_MILLIS(DEF_REP_BPM)) }),  // Cmaj
     _btn0_tog(HIGH),
     _btn1_tog(HIGH),
     _btn2_tog(HIGH),
