@@ -186,6 +186,7 @@ class Ctrlr
     int _btn7_seq;
     int _seqNote;
     bool _delayOn;
+    bool _chordsOn;
 };
 
 #endif

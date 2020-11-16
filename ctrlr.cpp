@@ -53,7 +53,8 @@ Ctrlr::Ctrlr(
     _metroBpm(METRO_BPM),
     _metro(BPM_TO_MILLIS(METRO_BPM)),
     _seqNote(0),
-    _delayOn(false)
+    _delayOn(false),
+    _chordsOn(false)
 {
   _midiChannel = midiChannel;
   _in0Pin = in0Pin;
@@ -195,7 +196,13 @@ void Ctrlr::processBtn(btnBehavior& bb, Buttoner& bBtnr, int& pinVal, int& btnTo
         bb.repMetro.interval(BPM_TO_MILLIS(DEF_REP_BPM));
         bb.repMetro.reset();
       }
-      usbMIDI.sendNoteOn(bb.noteVal, VEL_NOTE_ON, _midiChannel);
+      if (_chordsOn) {
+        usbMIDI.sendNoteOn(bb.noteVal, VEL_NOTE_ON, _midiChannel);
+        usbMIDI.sendNoteOn(bb.noteVal + 2, VEL_NOTE_ON, _midiChannel);
+        usbMIDI.sendNoteOn(bb.noteVal + 4, VEL_NOTE_ON, _midiChannel);
+      } else {
+        usbMIDI.sendNoteOn(bb.noteVal, VEL_NOTE_ON, _midiChannel);
+      }
     } else if (bBtnr.isReleased()) {
       pinVal = HIGH;
       //usbMIDI.sendNoteOn(bb.noteVal, VEL_NOTE_OFF, _midiChannel);
@@ -420,7 +427,14 @@ void Ctrlr::update() {
 
   if (_rencBtnr.isSinglePressed()) {
     if (_modeSel == mnote) {
-      _delayOn = !_delayOn;
+      if (!_delayOn && !_chordsOn) {
+        _delayOn = true;
+      } else if (_delayOn) {
+        _delayOn = false;
+        _chordsOn = true;
+      } else if (_chordsOn) {
+        _chordsOn = false;
+      }
     }
   }
   if (_rencBtnr.isDoublePressed()) {
@@ -737,6 +751,8 @@ void Ctrlr::displayControllerView() {
         _display.print(F("N"));
         if (_delayOn) {
           _display.print(F(" DL"));
+        } else if (_chordsOn) {
+          _display.print(F(" CH"));
         }
         break;
       case mcchg:
