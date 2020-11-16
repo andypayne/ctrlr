@@ -71,6 +71,7 @@ class Ctrlr
     struct btnBehavior {
       btnMode mode;
       int noteVal;
+      int chordVal[3];
       int ctlNum;
       int ctlVal;
       int repCount;

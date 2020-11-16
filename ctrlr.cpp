@@ -25,14 +25,14 @@ Ctrlr::Ctrlr(
     _b5Btnr(HIGH, LOW, HIGH, SW_MILLIS, SW_DBL_MILLIS),
     _b6Btnr(HIGH, LOW, HIGH, SW_MILLIS, SW_DBL_MILLIS),
     _b7Btnr(HIGH, LOW, HIGH, SW_MILLIS, SW_DBL_MILLIS),
-    _bb0({ defBtnMode, 60, 20, MidiDefs::MIDI_HIGH, 0, Metro(BPM_TO_MILLIS(DEF_REP_BPM)) }),
-    _bb1({ defBtnMode, 61, 21, MidiDefs::MIDI_HIGH, 0, Metro(BPM_TO_MILLIS(DEF_REP_BPM)) }),
-    _bb2({ defBtnMode, 62, 22, MidiDefs::MIDI_HIGH, 0, Metro(BPM_TO_MILLIS(DEF_REP_BPM)) }),
-    _bb3({ defBtnMode, 63, 23, MidiDefs::MIDI_HIGH, 0, Metro(BPM_TO_MILLIS(DEF_REP_BPM)) }),
-    _bb4({ defBtnMode, 64, 24, MidiDefs::MIDI_HIGH, 0, Metro(BPM_TO_MILLIS(DEF_REP_BPM)) }),
-    _bb5({ defBtnMode, 65, 25, MidiDefs::MIDI_HIGH, 0, Metro(BPM_TO_MILLIS(DEF_REP_BPM)) }),
-    _bb6({ defBtnMode, 66, 26, MidiDefs::MIDI_HIGH, 0, Metro(BPM_TO_MILLIS(DEF_REP_BPM)) }),
-    _bb7({ defBtnMode, 67, 27, MidiDefs::MIDI_HIGH, 0, Metro(BPM_TO_MILLIS(DEF_REP_BPM)) }),
+    _bb0({ defBtnMode, 60, {60, 64, 67}, 20, MidiDefs::MIDI_HIGH, 0, Metro(BPM_TO_MILLIS(DEF_REP_BPM)) }),  // Cmaj
+    _bb1({ defBtnMode, 61, {62, 65, 69}, 21, MidiDefs::MIDI_HIGH, 0, Metro(BPM_TO_MILLIS(DEF_REP_BPM)) }),  // Dmin
+    _bb2({ defBtnMode, 62, {64, 67, 71}, 22, MidiDefs::MIDI_HIGH, 0, Metro(BPM_TO_MILLIS(DEF_REP_BPM)) }),  // Emin
+    _bb3({ defBtnMode, 63, {65, 69, 72}, 23, MidiDefs::MIDI_HIGH, 0, Metro(BPM_TO_MILLIS(DEF_REP_BPM)) }),  // Fmaj
+    _bb4({ defBtnMode, 64, {67, 71, 74}, 24, MidiDefs::MIDI_HIGH, 0, Metro(BPM_TO_MILLIS(DEF_REP_BPM)) }),  // Gmaj
+    _bb5({ defBtnMode, 65, {69, 72, 76}, 25, MidiDefs::MIDI_HIGH, 0, Metro(BPM_TO_MILLIS(DEF_REP_BPM)) }),  // Amin
+    _bb6({ defBtnMode, 66, {71, 74, 77}, 26, MidiDefs::MIDI_HIGH, 0, Metro(BPM_TO_MILLIS(DEF_REP_BPM)) }),  // Bdim
+    _bb7({ defBtnMode, 67, {72, 76, 79}, 27, MidiDefs::MIDI_HIGH, 0, Metro(BPM_TO_MILLIS(DEF_REP_BPM)) }),  // Cmaj
     _btn0_tog(HIGH),
     _btn1_tog(HIGH),
     _btn2_tog(HIGH),
@@ -197,9 +197,9 @@ void Ctrlr::processBtn(btnBehavior& bb, Buttoner& bBtnr, int& pinVal, int& btnTo
         bb.repMetro.reset();
       }
       if (_chordsOn) {
-        usbMIDI.sendNoteOn(bb.noteVal, VEL_NOTE_ON, _midiChannel);
-        usbMIDI.sendNoteOn(bb.noteVal + 2, VEL_NOTE_ON, _midiChannel);
-        usbMIDI.sendNoteOn(bb.noteVal + 4, VEL_NOTE_ON, _midiChannel);
+        usbMIDI.sendNoteOn(bb.chordVal[0], VEL_NOTE_ON, _midiChannel);
+        usbMIDI.sendNoteOn(bb.chordVal[1], VEL_NOTE_ON, _midiChannel);
+        usbMIDI.sendNoteOn(bb.chordVal[2], VEL_NOTE_ON, _midiChannel);
       } else {
         usbMIDI.sendNoteOn(bb.noteVal, VEL_NOTE_ON, _midiChannel);
       }
