@@ -42,6 +42,7 @@
 #define METRO_BPM 120
 
 #define NUM_SEQ_STEPS  8
+#define NUM_SEQ2_STEPS  16
 
 int cycleBtnSeq(const int btnSeq);
 
@@ -54,6 +55,7 @@ class Ctrlr
       mcchg,
       mcchg2,  // Send MIDI_LOW on release
       mcchg3,  // Repeat mode
+      mnseq2,  // Sequencer 2
       mnseq,   // Note sequencer mode
     };
     const int NUM_BTN_MODES = 5;
@@ -66,7 +68,7 @@ class Ctrlr
     // Default delay BPM
     const int DEF_REP_BPM = 500;
 
-    btnMode defBtnMode = mnote;
+    btnMode defBtnMode = mnseq2;
 
     struct btnBehavior {
       btnMode mode;
@@ -76,6 +78,11 @@ class Ctrlr
       int ctlVal;
       int repCount;
       Metro repMetro;
+    };
+
+    struct noteSpec {
+      int note;
+      int vel;
     };
 
     Ctrlr(
@@ -101,6 +108,8 @@ class Ctrlr
     void displayControllerView();
     void printBtnStatus(const char *pre, Buttoner& bBtnr);
     void displayDebugView();
+    void displaySeq2();
+    void displayCurrentMode();
     void displayButtonStatus(const int pinVal, const int btnTog, const int btnX, const int btnY, const float btnSz, const float btnRad);
     void processBtn(btnBehavior& bb, Buttoner& bBtnr, int& pinVal, int& btnTog, int& btnSeq, long& btnTime);
     const btnMode relativeMode(const btnMode& mode, const int relVal);
@@ -188,6 +197,11 @@ class Ctrlr
     int _seqNote;
     bool _delayOn;
     bool _chordsOn;
+    noteSpec _seqSteps[NUM_SEQ2_STEPS];
+    int _seqEditStep;
+    bool _editingNotes;
+    bool _editingTempo;
+    bool _seqPlaying;
 };
 
 #endif

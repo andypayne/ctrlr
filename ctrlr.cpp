@@ -54,7 +54,14 @@ Ctrlr::Ctrlr(
     _metro(BPM_TO_MILLIS(METRO_BPM)),
     _seqNote(0),
     _delayOn(false),
-    _chordsOn(false)
+    _chordsOn(false),
+    //_seqSteps{ {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0} },
+    _seqSteps{ {60, 64}, {64, 80}, {62, 0}, {60, 10}, {66, 80}, {64, 0}, {66, 10}, {62, 80}, {60, 0}, {64, 10}, {68, 80}, {62, 0}, {62, 10}, {64, 0}, {60, 64}, {70, 90} },
+    //_seqSteps{ {60, 0}, {60, 0}, {60, 0}, {60, 0}, {60, 0}, {60, 0}, {60, 0}, {60, 0}, {60, 0}, {60, 0}, {60, 0}, {60, 0}, {60, 0}, {60, 0}, {60, 0}, {60, 0} },
+    _seqEditStep(0),
+    _editingNotes(true),
+    _editingTempo(false),
+    _seqPlaying(true)
 {
   _midiChannel = midiChannel;
   _in0Pin = in0Pin;
@@ -391,6 +398,12 @@ void Ctrlr::update() {
     if (_seqStep == NUM_SEQ_STEPS) {
       _seqStep = 0;
     }
+  } else if (_bb0.mode == mnseq2 && _metro.check() == 1 && _seqPlaying) {
+    usbMIDI.sendNoteOn(_seqSteps[_seqStep].note, _seqSteps[_seqStep].vel, _midiChannel);
+    _seqStep += 1;
+    if (_seqStep == NUM_SEQ2_STEPS) {
+      _seqStep = 0;
+    }
   }
 
   _b0Btnr.setVal(digitalRead(_in0Pin));
@@ -439,59 +452,24 @@ void Ctrlr::update() {
   }
   if (_rencBtnr.isDoublePressed()) {
     // Switch mode
-    switch(_bb0.mode) {
-      case mnote:
-        _bb0.mode = mcchg;
-        _bb1.mode = mcchg;
-        _bb2.mode = mcchg;
-        _bb3.mode = mcchg;
-        _bb4.mode = mcchg;
-        _bb5.mode = mcchg;
-        _bb6.mode = mcchg;
-        _bb7.mode = mcchg;
-        break;
-      case mcchg:
-        _bb0.mode = mcchg2;
-        _bb1.mode = mcchg2;
-        _bb2.mode = mcchg2;
-        _bb3.mode = mcchg2;
-        _bb4.mode = mcchg2;
-        _bb5.mode = mcchg2;
-        _bb6.mode = mcchg2;
-        _bb7.mode = mcchg2;
-        break;
-      case mcchg2:
-        _bb0.mode = mcchg3;
-        _bb1.mode = mcchg3;
-        _bb2.mode = mcchg3;
-        _bb3.mode = mcchg3;
-        _bb4.mode = mcchg3;
-        _bb5.mode = mcchg3;
-        _bb6.mode = mcchg3;
-        _bb7.mode = mcchg3;
-        break;
-      case mcchg3:
-        _bb0.mode = mnseq;
-        _bb1.mode = mnseq;
-        _bb2.mode = mnseq;
-        _bb3.mode = mnseq;
-        _bb4.mode = mnseq;
-        _bb5.mode = mnseq;
-        _bb6.mode = mnseq;
-        _bb7.mode = mnseq;
-        break;
-      case mnseq:
-        _bb0.mode = mnote;
-        _bb1.mode = mnote;
-        _bb2.mode = mnote;
-        _bb3.mode = mnote;
-        _bb4.mode = mnote;
-        _bb5.mode = mnote;
-        _bb6.mode = mnote;
-        _bb7.mode = mnote;
-        break;
-      default:
-        break;
+    if (_bb0.mode == mnseq) {
+      _bb0.mode = mnote;
+      _bb1.mode = mnote;
+      _bb2.mode = mnote;
+      _bb3.mode = mnote;
+      _bb4.mode = mnote;
+      _bb5.mode = mnote;
+      _bb6.mode = mnote;
+      _bb7.mode = mnote;
+    } else {
+      _bb0.mode = (btnMode)(_bb0.mode + 1);
+      _bb1.mode = (btnMode)(_bb1.mode + 1);
+      _bb2.mode = (btnMode)(_bb2.mode + 1);
+      _bb3.mode = (btnMode)(_bb3.mode + 1);
+      _bb4.mode = (btnMode)(_bb4.mode + 1);
+      _bb5.mode = (btnMode)(_bb5.mode + 1);
+      _bb6.mode = (btnMode)(_bb6.mode + 1);
+      _bb7.mode = (btnMode)(_bb7.mode + 1);
     }
     usbMIDI.sendControlChange(MODE_CHG_CTL_NUM, _bb0.mode, _midiChannel);
   }
@@ -503,6 +481,57 @@ void Ctrlr::update() {
   }
 
   long new_renc_val = _renc.read();
+
+  if (_bb0.mode == mnseq2) {
+    if (_b0Btnr.isPressedDown() || _b0Btnr.isHeld()) {
+      _seqEditStep = (_seqEditStep == 0) ? _seqEditStep : _seqEditStep - 1;
+    } else if (_b4Btnr.isPressedDown() || _b4Btnr.isHeld()) {
+      _seqEditStep = (_seqEditStep == NUM_SEQ2_STEPS - 1) ? _seqEditStep : _seqEditStep + 1;
+    }
+    if (_b1Btnr.isSinglePressed()) {
+      _editingNotes = !_editingNotes;
+    }
+    if (_b5Btnr.isSinglePressed()) {
+      _editingTempo = !_editingTempo;
+    }
+    if (_b3Btnr.isSinglePressed()) {
+      _seqPlaying = !_seqPlaying;
+      if (_seqPlaying) {
+        _seqStep = 0;
+        _metro.reset();
+      }
+    }
+    if (!_modeChanging) {
+      if (new_renc_val != _renc_val) {
+        if (new_renc_val > _renc_val) {
+          if (_editingTempo) {
+            if (new_renc_val != _renc_val) {
+              _metroBpm = _metroBpm + (new_renc_val - _renc_val);
+              _metro.interval(BPM_TO_MILLIS(_metroBpm));
+              _metro.reset();
+              _renc_val = new_renc_val;
+            }
+          } else if (_editingNotes) {
+            _seqSteps[_seqEditStep].note += 1;
+            _seqSteps[_seqEditStep].note = _seqSteps[_seqEditStep].note > 127 ? 127 : _seqSteps[_seqEditStep].note;
+          } else {
+            _seqSteps[_seqEditStep].vel += 1;
+            _seqSteps[_seqEditStep].vel = _seqSteps[_seqEditStep].vel > 127 ? 127 : _seqSteps[_seqEditStep].vel;
+          }
+        } else {
+          if (_editingTempo) {
+          } else if (_editingNotes) {
+            _seqSteps[_seqEditStep].note -= 1;
+            _seqSteps[_seqEditStep].note = _seqSteps[_seqEditStep].note < 21 ? 21 : _seqSteps[_seqEditStep].note;
+          } else {
+            _seqSteps[_seqEditStep].vel -= 1;
+            _seqSteps[_seqEditStep].vel = _seqSteps[_seqEditStep].vel < 0 ? 0 : _seqSteps[_seqEditStep].vel;
+          }
+        }
+      }
+    }
+  }
+
   if (_rencBtnr.isHeld()) {
     _modeChanging = true;
     if (new_renc_val != _renc_val) {
@@ -626,9 +655,34 @@ void Ctrlr::displayControllerView() {
   int marX = 6;
   int marY = 4;
 
+  _display.setTextSize(1);
+  _display.setTextColor(SSD1306_WHITE);
+
   // Buttons
   float btnSz = 11;
   float btnRad = 2;
+  // Encoder
+  int encRad = 10;
+
+  if (_bb0.mode == mnseq2) {
+    _display.setCursor(5.55 * (marX + btnSz) + encRad, _display.height() / 2 - 15);
+    //displayCurrentMode();
+    _display.print(F(MidiDefs::noteNames(_seqSteps[_seqStep].note)));
+    _display.setCursor(5.55 * (marX + btnSz) + encRad, _display.height() / 2 - 3);
+    _display.print(F(MidiDefs::noteNames(_seqSteps[_seqEditStep].note)));
+    if (_seqPlaying) {
+      _display.setCursor(5.55 * (marX + btnSz) + encRad, _display.height() / 2 + 9);
+      _display.print(_seqSteps[_seqEditStep].vel);
+    } else {
+      // Pause symbol
+      _display.fillRect(5.55 * (marX + btnSz) + encRad + 1, _display.height() / 2 + 9, 3, 7, SSD1306_WHITE);
+      _display.fillRect(5.55 * (marX + btnSz) + encRad + 1 + 6, _display.height() / 2 + 9, 3, 7, SSD1306_WHITE);
+    }
+    displaySeq2();
+    _display.display();
+    return;
+  }
+
   if (_bb0.mode == mnseq) {
     float btn0SeqSz = 0.75 * _btn0_seq / 127.0 * btnSz + 0.25 * btnSz;
     float btn1SeqSz = 0.75 * _btn1_seq / 127.0 * btnSz + 0.25 * btnSz;
@@ -676,7 +730,6 @@ void Ctrlr::displayControllerView() {
   }
 
   // Encoder
-  int encRad = 10;
   float rencX = 4.5 * (marX + btnSz) + encRad;
   float rencY = _display.height() / 2;
   if (_renc_sw_val == LOW) {
@@ -692,15 +745,13 @@ void Ctrlr::displayControllerView() {
     drawRencIndicator(indPitchX, indPitchY, rencX, rencY);
   }
 
-  if (!_modeChanging && ((_bb0.mode == mcchg3 && _pin0_val == LOW) || _bb0.mode == mnseq)) {
+  if (!_modeChanging && ((_bb0.mode == mcchg3 && _pin0_val == LOW) || _bb0.mode == mnseq || _bb0.mode == mnseq2)) {
     // Metro renc
     float indMetroX = encRad * cos(2 * PI * _metroBpm / 80.0 - PI / 2);
     float indMetroY = encRad * sin(2 * PI * _metroBpm / 80.0 - PI / 2);
     drawRencIndicator(indMetroX, indMetroY, rencX, rencY);
   }
 
-  _display.setTextSize(1);
-  _display.setTextColor(SSD1306_WHITE);
   _display.setCursor(5.55 * (marX + btnSz) + encRad, _display.height() / 2 - 3);
   if (_bb0.mode == mnseq && _b0Btnr.isHeld()) {
     _display.print(F(MidiDefs::noteNames(_bb0.noteVal)));
@@ -725,6 +776,51 @@ void Ctrlr::displayControllerView() {
   }
 
   _display.setCursor(5.55 * (marX + btnSz) + encRad, _display.height() / 2 - 15);
+  displayCurrentMode();
+
+  if (_bb0.mode == mcchg3 || _bb0.mode == mnseq) {
+    _display.setCursor(5.55 * (marX + btnSz) + encRad, _display.height() / 2 + 8);
+    _display.print(_metroBpm);
+  }
+
+  _display.display();
+}
+
+void Ctrlr::displaySeq2() {
+  float sidebarWidth = 24.0;
+  float stepWidth = (_display.width() - sidebarWidth) / NUM_SEQ2_STEPS;
+  float minNote = 127;
+  float maxNote = 0;
+  float minVel = 127;
+  float maxVel = 0;
+  for (int i = 0; i < NUM_SEQ2_STEPS; ++i) {
+    if (_seqSteps[i].note > maxNote) {
+      maxNote = _seqSteps[i].note;
+    } else if (_seqSteps[i].note < minNote) {
+      minNote = _seqSteps[i].note;
+    }
+    if (_seqSteps[i].vel > maxVel) {
+      maxVel = _seqSteps[i].vel;
+    } else if (_seqSteps[i].vel < minVel) {
+      minVel = _seqSteps[i].vel;
+    }
+  }
+  for (int i = 0; i < NUM_SEQ2_STEPS; ++i) {
+    //float yNoteLvl = _display.height() - (_seqSteps[i].note - 60);
+    //float yVelLvl = _display.height() - _display.height() * (_seqSteps[i].vel / 127.0);
+    // Scale display values by the range
+    float yNoteLvl = _display.height() - _display.height() / (maxNote - minNote) * (_seqSteps[i].note - minNote);
+    float yVelLvl = _display.height() - _display.height() / (maxVel - minVel) * (_seqSteps[i].vel - minVel);
+    float stepHeight = i == _seqStep ? 3 : 1;
+    _display.fillRoundRect(i * stepWidth, yNoteLvl, stepWidth - 2, stepHeight, 2, SSD1306_WHITE);
+    _display.drawRect(i * stepWidth + 0.5 * stepWidth - 2, yVelLvl, 2, 1, SSD1306_WHITE);
+    if (i == _seqEditStep) {
+      _display.drawRect(i * stepWidth, _display.height() - 1, stepWidth - 2, 1, SSD1306_WHITE);
+    }
+  }
+}
+
+void Ctrlr::displayCurrentMode() {
   if (_modeChanging) {
     switch(_modeSel) {
       case mnote:
@@ -741,6 +837,9 @@ void Ctrlr::displayControllerView() {
         break;
       case mnseq:
         _display.print(F("NS"));
+        break;
+      case mnseq2:
+        _display.print(F("NS2"));
         break;
       default:
         break;
@@ -767,17 +866,13 @@ void Ctrlr::displayControllerView() {
       case mnseq:
         _display.print(F("NS"));
         break;
+      case mnseq2:
+        _display.print(F("NS2"));
+        break;
       default:
         break;
     }
   }
-
-  if (_bb0.mode == mcchg3 || _bb0.mode == mnseq) {
-    _display.setCursor(5.55 * (marX + btnSz) + encRad, _display.height() / 2 + 8);
-    _display.print(_metroBpm);
-  }
-
-  _display.display();
 }
 
 void Ctrlr::displayButtonStatus(const int pinVal, const int btnTog, const int btnX, const int btnY, const float btnSz, const float btnRad) {
