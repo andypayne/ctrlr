@@ -38,7 +38,7 @@
 
 #define MODE_CHG_CTL_NUM  28
 
-#define BPM_TO_MILLIS(bpm) ((60.0 / bpm) * 1000)
+#define BPM_TO_MILLIS(bpm) ((60.0 / bpm) * 1000.0)
 #define METRO_BPM 120
 
 #define NUM_SEQ_STEPS  8

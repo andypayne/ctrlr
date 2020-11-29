@@ -31,7 +31,7 @@ Ctrlr::Ctrlr(
     _bb3({ defBtnMode, 63, maj_7(65), 23, MidiDefs::MIDI_HIGH, 0, Metro(BPM_TO_MILLIS(DEF_REP_BPM)) }),  // Fmaj
     _bb4({ defBtnMode, 64, dom_7(67), 24, MidiDefs::MIDI_HIGH, 0, Metro(BPM_TO_MILLIS(DEF_REP_BPM)) }),  // Gmaj
     _bb5({ defBtnMode, 65, min_7(69), 25, MidiDefs::MIDI_HIGH, 0, Metro(BPM_TO_MILLIS(DEF_REP_BPM)) }),  // Amin
-    _bb6({ defBtnMode, 66, dim_7(71), 26, MidiDefs::MIDI_HIGH, 0, Metro(BPM_TO_MILLIS(DEF_REP_BPM)) }),  // Bdim
+    _bb6({ defBtnMode, 66, dim_7(71), 26, MidiDefs::MIDI_HIGH, 0, Metro(BPM_TO_MILLIS(DEF_REP_BPM)) }),  // Bmin7b5
     _bb7({ defBtnMode, 67, maj_7(72), 27, MidiDefs::MIDI_HIGH, 0, Metro(BPM_TO_MILLIS(DEF_REP_BPM)) }),  // Cmaj
     _btn0_tog(HIGH),
     _btn1_tog(HIGH),
@@ -56,8 +56,9 @@ Ctrlr::Ctrlr(
     _delayOn(false),
     _chordsOn(false),
     //_seqSteps{ {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0} },
-    _seqSteps{ {60, 64}, {64, 80}, {62, 0}, {60, 10}, {66, 80}, {64, 0}, {66, 10}, {62, 80}, {60, 0}, {64, 10}, {68, 80}, {62, 0}, {62, 10}, {64, 0}, {60, 64}, {70, 90} },
+    //_seqSteps{ {60, 64}, {64, 80}, {62, 0}, {60, 10}, {66, 80}, {64, 0}, {66, 10}, {62, 80}, {60, 0}, {64, 10}, {68, 80}, {62, 0}, {62, 10}, {64, 0}, {60, 64}, {70, 90} },
     //_seqSteps{ {60, 0}, {60, 0}, {60, 0}, {60, 0}, {60, 0}, {60, 0}, {60, 0}, {60, 0}, {60, 0}, {60, 0}, {60, 0}, {60, 0}, {60, 0}, {60, 0}, {60, 0}, {60, 0} },
+    _seqSteps{ {60, 95}, {60, 95}, {60, 95}, {60, 95}, {60, 95}, {60, 95}, {60, 95}, {60, 95}, {60, 95}, {60, 95}, {60, 95}, {60, 95}, {60, 95}, {60, 95}, {60, 95}, {60, 95} },
     _seqEditStep(0),
     _editingNotes(true),
     _editingTempo(false),
