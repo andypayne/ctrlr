@@ -60,9 +60,9 @@ Ctrlr::Ctrlr(
     //_seqSteps{ {60, 0}, {60, 0}, {60, 0}, {60, 0}, {60, 0}, {60, 0}, {60, 0}, {60, 0}, {60, 0}, {60, 0}, {60, 0}, {60, 0}, {60, 0}, {60, 0}, {60, 0}, {60, 0} },
     _seqSteps{ {60, 95}, {60, 95}, {60, 95}, {60, 95}, {60, 95}, {60, 95}, {60, 95}, {60, 95}, {60, 95}, {60, 95}, {60, 95}, {60, 95}, {60, 95}, {60, 95}, {60, 95}, {60, 95} },
     _seqEditStep(0),
-    _editingNotes(true),
-    _editingTempo(false),
-    _seqPlaying(true)
+    _seqPlaying(true),
+    _numSeq2Steps(NUM_SEQ2_STEPS),
+    _editMode(senote)
 {
   _midiChannel = midiChannel;
   _in0Pin = in0Pin;
@@ -402,7 +402,7 @@ void Ctrlr::update() {
   } else if (_bb0.mode == mnseq2 && _metro.check() == 1 && _seqPlaying) {
     usbMIDI.sendNoteOn(_seqSteps[_seqStep].note, _seqSteps[_seqStep].vel, _midiChannel);
     _seqStep += 1;
-    if (_seqStep == NUM_SEQ2_STEPS) {
+    if (_seqStep == _numSeq2Steps) {
       _seqStep = 0;
     }
   }
@@ -483,17 +483,22 @@ void Ctrlr::update() {
 
   long new_renc_val = _renc.read();
 
+  // 16-step sequencer
+  // b0, b4 - edit step fwd/bwd
+  // b1 - edit note/velocity toggle
+  // b5 - edit tempo/length toggle
+  // b3 - play/pause toggle
   if (_bb0.mode == mnseq2) {
     if (_b0Btnr.isPressedDown() || _b0Btnr.isHeld()) {
       _seqEditStep = (_seqEditStep == 0) ? _seqEditStep : _seqEditStep - 1;
     } else if (_b4Btnr.isPressedDown() || _b4Btnr.isHeld()) {
-      _seqEditStep = (_seqEditStep == NUM_SEQ2_STEPS - 1) ? _seqEditStep : _seqEditStep + 1;
+      _seqEditStep = (_seqEditStep == _numSeq2Steps - 1) ? _seqEditStep : _seqEditStep + 1;
     }
     if (_b1Btnr.isSinglePressed()) {
-      _editingNotes = !_editingNotes;
+      _editMode = _editMode == senote ? sevel : senote;
     }
     if (_b5Btnr.isSinglePressed()) {
-      _editingTempo = !_editingTempo;
+      _editMode = _editMode == setempo ? selen : setempo;
     }
     if (_b3Btnr.isSinglePressed()) {
       _seqPlaying = !_seqPlaying;
@@ -505,30 +510,44 @@ void Ctrlr::update() {
     if (!_modeChanging) {
       if (new_renc_val != _renc_val) {
         if (new_renc_val > _renc_val) {
-          if (_editingTempo) {
-            if (new_renc_val != _renc_val) {
-              _metroBpm = _metroBpm + (new_renc_val - _renc_val);
-              _metro.interval(BPM_TO_MILLIS(_metroBpm));
-              _metro.reset();
-              _renc_val = new_renc_val;
-            }
-          } else if (_editingNotes) {
+          if (_editMode == setempo) {
+            _metroBpm = _metroBpm + (new_renc_val - _renc_val);
+            _metro.interval(BPM_TO_MILLIS(_metroBpm));
+            _seqStep = 0;
+            _metro.reset();
+          } else if (_editMode == selen) {
+            _numSeq2Steps += 1;
+            _numSeq2Steps = _numSeq2Steps > 16 ? 16 : _numSeq2Steps;
+            _seqStep = 0;
+            //_metro.reset();
+          } else if (_editMode == senote) {
             _seqSteps[_seqEditStep].note += 1;
             _seqSteps[_seqEditStep].note = _seqSteps[_seqEditStep].note > 127 ? 127 : _seqSteps[_seqEditStep].note;
-          } else {
+          } else if (_editMode == sevel) {
             _seqSteps[_seqEditStep].vel += 1;
             _seqSteps[_seqEditStep].vel = _seqSteps[_seqEditStep].vel > 127 ? 127 : _seqSteps[_seqEditStep].vel;
           }
         } else {
-          if (_editingTempo) {
-          } else if (_editingNotes) {
+          if (_editMode == setempo) {
+            _metroBpm = _metroBpm + (new_renc_val - _renc_val);
+            _metro.interval(BPM_TO_MILLIS(_metroBpm));
+            _seqStep = 0;
+            _metro.reset();
+          } else if (_editMode == selen) {
+            _numSeq2Steps -= 1;
+            _numSeq2Steps = _numSeq2Steps < 1 ? 1 : _numSeq2Steps;
+            _seqStep = 0;
+            //_metro.reset();
+          } else if (_editMode == senote) {
             _seqSteps[_seqEditStep].note -= 1;
             _seqSteps[_seqEditStep].note = _seqSteps[_seqEditStep].note < 21 ? 21 : _seqSteps[_seqEditStep].note;
-          } else {
+          } else if (_editMode == sevel) {
             _seqSteps[_seqEditStep].vel -= 1;
             _seqSteps[_seqEditStep].vel = _seqSteps[_seqEditStep].vel < 0 ? 0 : _seqSteps[_seqEditStep].vel;
           }
         }
+
+        _renc_val = new_renc_val;
       }
     }
   }
@@ -789,12 +808,12 @@ void Ctrlr::displayControllerView() {
 
 void Ctrlr::displaySeq2() {
   float sidebarWidth = 24.0;
-  float stepWidth = (_display.width() - sidebarWidth) / NUM_SEQ2_STEPS;
+  float stepWidth = (_display.width() - sidebarWidth) / _numSeq2Steps;
   float minNote = 127;
   float maxNote = 0;
   float minVel = 127;
   float maxVel = 0;
-  for (int i = 0; i < NUM_SEQ2_STEPS; ++i) {
+  for (int i = 0; i < _numSeq2Steps; ++i) {
     if (_seqSteps[i].note > maxNote) {
       maxNote = _seqSteps[i].note;
     } else if (_seqSteps[i].note < minNote) {
@@ -806,7 +825,7 @@ void Ctrlr::displaySeq2() {
       minVel = _seqSteps[i].vel;
     }
   }
-  for (int i = 0; i < NUM_SEQ2_STEPS; ++i) {
+  for (int i = 0; i < _numSeq2Steps; ++i) {
     //float yNoteLvl = _display.height() - (_seqSteps[i].note - 60);
     //float yVelLvl = _display.height() - _display.height() * (_seqSteps[i].vel / 127.0);
     // Scale display values by the range

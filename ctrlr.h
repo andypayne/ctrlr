@@ -85,6 +85,13 @@ class Ctrlr
       int vel;
     };
 
+    enum seqEditMode {
+      senote,
+      sevel,
+      setempo,
+      selen
+    };
+
     Ctrlr(
       int midiChannel,
       int in0Pin,
@@ -199,9 +206,9 @@ class Ctrlr
     bool _chordsOn;
     noteSpec _seqSteps[NUM_SEQ2_STEPS];
     int _seqEditStep;
-    bool _editingNotes;
-    bool _editingTempo;
     bool _seqPlaying;
+    int _numSeq2Steps;
+    seqEditMode _editMode;
 };
 
 #endif
