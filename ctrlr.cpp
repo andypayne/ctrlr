@@ -501,6 +501,9 @@ void Ctrlr::update() {
     if (_b5Btnr.isSinglePressed()) {
       _editMode = _editMode == setempo ? selen : setempo;
     }
+    if (_b2Btnr.isSinglePressed()) {
+      _editMode = _editMode == sesto ? serec : sesto;
+    }
     if (_b3Btnr.isSinglePressed()) {
       _seqPlaying = !_seqPlaying;
       if (_seqPlaying) {
@@ -706,11 +709,16 @@ void Ctrlr::displayControllerView() {
         case selen:
           _display.print("LN");
           break;
+        case sesto:
+          _display.print("ST");
+          break;
+        case serec:
+          _display.print("RE");
+          break;
         default:
           _display.print(_seqSteps[_seqEditStep].vel);
           break;
       }
-
     } else {
       // Pause symbol
       _display.fillRect(5.55 * (marX + btnSz) + encRad + 1, _display.height() / 2 + 9, 3, 7, SSD1306_WHITE);
