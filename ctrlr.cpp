@@ -486,6 +486,7 @@ void Ctrlr::update() {
   // 16-step sequencer
   // b0, b4 - edit step fwd/bwd
   // b1 - edit note/velocity toggle
+  // b2 - store/recall
   // b5 - edit tempo/length toggle
   // b3 - play/pause toggle
   if (_bb0.mode == mnseq2) {
@@ -692,7 +693,24 @@ void Ctrlr::displayControllerView() {
     _display.print(F(MidiDefs::noteNames(_seqSteps[_seqEditStep].note)));
     if (_seqPlaying) {
       _display.setCursor(5.55 * (marX + btnSz) + encRad, _display.height() / 2 + 9);
-      _display.print(_seqSteps[_seqEditStep].vel);
+      switch(_editMode) {
+        case senote:
+          _display.print("NT");
+          break;
+        case sevel:
+          _display.print("VL");
+          break;
+        case setempo:
+          _display.print("TP");
+          break;
+        case selen:
+          _display.print("LN");
+          break;
+        default:
+          _display.print(_seqSteps[_seqEditStep].vel);
+          break;
+      }
+
     } else {
       // Pause symbol
       _display.fillRect(5.55 * (marX + btnSz) + encRad + 1, _display.height() / 2 + 9, 3, 7, SSD1306_WHITE);

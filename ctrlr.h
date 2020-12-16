@@ -89,7 +89,9 @@ class Ctrlr
       senote,
       sevel,
       setempo,
-      selen
+      selen,
+      sesto,
+      serec
     };
 
     Ctrlr(
