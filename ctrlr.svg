@@ -7,9 +7,9 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="210mm"
-   height="297mm"
-   viewBox="0 0 210 297"
+   width="187.39224mm"
+   height="98.453354mm"
+   viewBox="0 0 187.39224 98.453354"
    version="1.1"
    id="svg8"
    inkscape:version="1.0.1 (c497b03c, 2020-09-10)"
@@ -17,7 +17,7 @@
   <defs
      id="defs2">
     <filter
-       style="color-interpolation-filters:sRGB;"
+       style="color-interpolation-filters:sRGB"
        inkscape:label="Drop Shadow"
        id="filter1084">
       <feFlood
@@ -49,7 +49,7 @@
          id="feComposite1082" />
     </filter>
     <filter
-       style="color-interpolation-filters:sRGB;"
+       style="color-interpolation-filters:sRGB"
        inkscape:label="Drop Shadow"
        id="filter2696">
       <feFlood
@@ -81,7 +81,7 @@
          id="feComposite2694" />
     </filter>
     <filter
-       style="color-interpolation-filters:sRGB;"
+       style="color-interpolation-filters:sRGB"
        inkscape:label="Drop Shadow"
        id="filter2708">
       <feFlood
@@ -113,7 +113,7 @@
          id="feComposite2706" />
     </filter>
     <filter
-       style="color-interpolation-filters:sRGB;"
+       style="color-interpolation-filters:sRGB"
        inkscape:label="Drop Shadow"
        id="filter2720">
       <feFlood
@@ -145,7 +145,7 @@
          id="feComposite2718" />
     </filter>
     <filter
-       style="color-interpolation-filters:sRGB;"
+       style="color-interpolation-filters:sRGB"
        inkscape:label="Drop Shadow"
        id="filter2732">
       <feFlood
@@ -177,7 +177,7 @@
          id="feComposite2730" />
     </filter>
     <filter
-       style="color-interpolation-filters:sRGB;"
+       style="color-interpolation-filters:sRGB"
        inkscape:label="Drop Shadow"
        id="filter2744">
       <feFlood
@@ -209,7 +209,7 @@
          id="feComposite2742" />
     </filter>
     <filter
-       style="color-interpolation-filters:sRGB;"
+       style="color-interpolation-filters:sRGB"
        inkscape:label="Drop Shadow"
        id="filter2756">
       <feFlood
@@ -241,7 +241,7 @@
          id="feComposite2754" />
     </filter>
     <filter
-       style="color-interpolation-filters:sRGB;"
+       style="color-interpolation-filters:sRGB"
        inkscape:label="Drop Shadow"
        id="filter2768">
       <feFlood
@@ -273,7 +273,7 @@
          id="feComposite2766" />
     </filter>
     <filter
-       style="color-interpolation-filters:sRGB;"
+       style="color-interpolation-filters:sRGB"
        inkscape:label="Drop Shadow"
        id="filter2780">
       <feFlood
@@ -305,7 +305,7 @@
          id="feComposite2778" />
     </filter>
     <filter
-       style="color-interpolation-filters:sRGB;"
+       style="color-interpolation-filters:sRGB"
        inkscape:label="Drop Shadow"
        id="filter2864">
       <feFlood
@@ -345,8 +345,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.60982647"
-     inkscape:cx="301.74318"
-     inkscape:cy="443.89056"
+     inkscape:cx="253.29759"
+     inkscape:cy="131.44969"
      inkscape:document-units="mm"
      inkscape:current-layer="layer2"
      inkscape:document-rotation="0"
@@ -355,7 +355,11 @@
      inkscape:window-height="855"
      inkscape:window-x="0"
      inkscape:window-y="23"
-     inkscape:window-maximized="1" />
+     inkscape:window-maximized="1"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0" />
   <metadata
      id="metadata5">
     <rdf:RDF>
@@ -371,9 +375,10 @@
   <g
      inkscape:groupmode="layer"
      id="layer2"
-     inkscape:label="Layer 2">
+     inkscape:label="Layer 2"
+     transform="translate(-12.817898,-82.666646)">
     <rect
-       style="opacity:1;fill:#ffffff;stroke:#333333;stroke-width:1;stroke-opacity:1;fill-opacity:1;filter:url(#filter2864)"
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#333333;stroke-width:1;stroke-opacity:1;filter:url(#filter2864)"
        id="rect868"
        width="172.14066"
        height="81.250381"
@@ -382,7 +387,7 @@
        rx="2.0000012"
        ry="2.0000012" />
     <rect
-       style="opacity:1;fill:#ffffff;stroke:#595959;stroke-width:1;stroke-opacity:1;fill-opacity:1;filter:url(#filter2696)"
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#595959;stroke-width:1;stroke-opacity:1;filter:url(#filter2696)"
        id="rect870"
        width="18.820709"
        height="18.820709"
@@ -391,7 +396,7 @@
        rx="2.0000012"
        ry="2.0000012" />
     <rect
-       style="opacity:1;fill:#ffffff;stroke:#595959;stroke-width:1;stroke-opacity:1;fill-opacity:1;filter:url(#filter2708)"
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#595959;stroke-width:1;stroke-opacity:1;filter:url(#filter2708)"
        id="rect872"
        width="18.820709"
        height="18.820709"
@@ -400,7 +405,7 @@
        rx="2.0000012"
        ry="2.0000012" />
     <rect
-       style="opacity:1;fill:#ffffff;stroke:#595959;stroke-width:1;stroke-opacity:1;fill-opacity:1;filter:url(#filter2720)"
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#595959;stroke-width:1;stroke-opacity:1;filter:url(#filter2720)"
        id="rect874"
        width="18.820709"
        height="18.820709"
@@ -409,7 +414,7 @@
        rx="2.0000012"
        ry="2.0000012" />
     <rect
-       style="opacity:1;fill:#ffffff;stroke:#595959;stroke-width:1;stroke-opacity:1;fill-opacity:1;filter:url(#filter2732)"
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#595959;stroke-width:1;stroke-opacity:1;filter:url(#filter2732)"
        id="rect876"
        width="18.820709"
        height="18.820709"
@@ -418,7 +423,7 @@
        rx="2.0000012"
        ry="2.0000012" />
     <rect
-       style="opacity:1;fill:#ffffff;stroke:#595959;stroke-width:1;stroke-opacity:1;fill-opacity:1;filter:url(#filter2744)"
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#595959;stroke-width:1;stroke-opacity:1;filter:url(#filter2744)"
        id="rect878"
        width="18.820709"
        height="18.820709"
@@ -427,7 +432,7 @@
        rx="2.0000012"
        ry="2.0000012" />
     <rect
-       style="opacity:1;fill:#ffffff;stroke:#595959;stroke-width:1;stroke-opacity:1;fill-opacity:1;filter:url(#filter2756)"
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#595959;stroke-width:1;stroke-opacity:1;filter:url(#filter2756)"
        id="rect880"
        width="18.820709"
        height="18.820709"
@@ -436,7 +441,7 @@
        rx="2.0000012"
        ry="2.0000012" />
     <rect
-       style="opacity:1;fill:#ffffff;stroke:#595959;stroke-width:1;stroke-opacity:1;fill-opacity:1;filter:url(#filter2768)"
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#595959;stroke-width:1;stroke-opacity:1;filter:url(#filter2768)"
        id="rect882"
        width="18.820709"
        height="18.820709"
@@ -445,7 +450,7 @@
        rx="2.0000012"
        ry="2.0000012" />
     <rect
-       style="opacity:1;fill:#ffffff;stroke:#595959;stroke-width:1;stroke-opacity:1;fill-opacity:1;filter:url(#filter2780)"
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#595959;stroke-width:1;stroke-opacity:1;filter:url(#filter2780)"
        id="rect884"
        width="18.820709"
        height="18.820709"
@@ -454,13 +459,13 @@
        rx="2.0000012"
        ry="2.0000012" />
     <circle
-       style="opacity:1;fill:#ffffff;stroke:#595959;stroke-width:1.06548;stroke-opacity:1;fill-opacity:1;filter:url(#filter1084)"
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#595959;stroke-width:1.06548;stroke-opacity:1;filter:url(#filter1084)"
        id="path888"
        cx="159.99521"
        cy="130.897"
        r="29.345932" />
     <rect
-       style="opacity:1;fill:#4d4d4d;stroke:#1a1a1a;stroke-width:1;fill-opacity:1"
+       style="opacity:1;fill:#4d4d4d;fill-opacity:1;stroke:#1a1a1a;stroke-width:1"
        id="rect892"
        width="27.542503"
        height="10.55796"
@@ -475,7 +480,7 @@
        cy="113.32381"
        r="1.1436439" />
     <rect
-       style="opacity:1;fill:#e5e5e5;stroke:none;stroke-width:0.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;fill-opacity:1"
+       style="opacity:1;fill:#e5e5e5;fill-opacity:1;stroke:none;stroke-width:0.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect906"
        width="19.526041"
        height="0.86607438"
@@ -484,7 +489,7 @@
        rx="0.25"
        ry="0.25" />
     <rect
-       style="opacity:1;fill:#e5e5e5;stroke:none;stroke-width:0.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;fill-opacity:1"
+       style="opacity:1;fill:#e5e5e5;fill-opacity:1;stroke:none;stroke-width:0.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect908"
        width="2.3601508"
        height="1.0216724"
@@ -493,7 +498,7 @@
        rx="0.2"
        ry="0.2" />
     <rect
-       style="opacity:1;fill:#e5e5e5;stroke:none;stroke-width:0.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;fill-opacity:1"
+       style="opacity:1;fill:#e5e5e5;fill-opacity:1;stroke:none;stroke-width:0.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect910"
        width="2.3601508"
        height="1.0216724"
@@ -502,7 +507,7 @@
        rx="0.2"
        ry="0.2" />
     <rect
-       style="opacity:1;fill:#e5e5e5;stroke:none;stroke-width:0.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;fill-opacity:1"
+       style="opacity:1;fill:#e5e5e5;fill-opacity:1;stroke:none;stroke-width:0.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect912"
        width="2.3601508"
        height="1.0216724"
@@ -511,7 +516,7 @@
        rx="0.2"
        ry="0.2" />
     <rect
-       style="opacity:1;fill:#e5e5e5;stroke:none;stroke-width:0.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;fill-opacity:1"
+       style="opacity:1;fill:#e5e5e5;fill-opacity:1;stroke:none;stroke-width:0.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect916"
        width="2.3601508"
        height="1.0216724"
@@ -520,7 +525,7 @@
        rx="0.2"
        ry="0.2" />
     <rect
-       style="opacity:1;fill:#e5e5e5;stroke:none;stroke-width:0.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;fill-opacity:1"
+       style="opacity:1;fill:#e5e5e5;fill-opacity:1;stroke:none;stroke-width:0.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect918"
        width="2.3601508"
        height="1.0216724"
@@ -529,7 +534,7 @@
        rx="0.2"
        ry="0.2" />
     <rect
-       style="opacity:1;fill:#e5e5e5;stroke:none;stroke-width:0.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;fill-opacity:1"
+       style="opacity:1;fill:#e5e5e5;fill-opacity:1;stroke:none;stroke-width:0.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect920"
        width="2.3601508"
        height="1.0216724"
@@ -538,7 +543,7 @@
        rx="0.2"
        ry="0.2" />
     <rect
-       style="opacity:1;fill:#e5e5e5;stroke:none;stroke-width:0.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;fill-opacity:1"
+       style="opacity:1;fill:#e5e5e5;fill-opacity:1;stroke:none;stroke-width:0.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect922"
        width="2.3601508"
        height="1.0216724"
