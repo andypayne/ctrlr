@@ -16,7 +16,9 @@
 // https://playground.arduino.cc/Code/Metro/
 #include <Metro.h>
 
+// https://github.com/andypayne/midi_defs
 #include "../../midi_defs/midi_defs.h"
+// https://github.com/andypayne/buttoner
 #include "../../buttoner/buttoner.h"
 
 // SSD1306 128x32 panel
