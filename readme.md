@@ -2,7 +2,7 @@
 
 A programmable MIDI Controller
 
-![CTRLR](ctrlr.png)
+![CTRLR](docs/ctrlr.png)
 
 ## Hardware
 
