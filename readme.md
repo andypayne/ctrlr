@@ -28,5 +28,5 @@ TODO - elaborate on issues
 - screen - fit, size, asymmetry
 - button travel
 - access to reset, etc
-
+- header pin connectors - poor fit
 
