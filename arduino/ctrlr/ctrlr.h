@@ -3,6 +3,7 @@
 
 #include <SPI.h>
 #include <Wire.h>
+#include <EEPROM.h>
 
 // Adafruit SSD1306
 // https://github.com/adafruit/Adafruit_SSD1306
@@ -70,6 +71,11 @@ class Ctrlr
     // Default delay BPM
     const int DEF_REP_BPM = 500;
 
+    // EEPROM addresses
+    const int EADDR_TEMPO = 0;
+    const int EADDR_LEN = 1;
+    const int EADDR_SEQ = 2;
+
     btnMode defBtnMode = mnseq2;
 
     struct btnBehavior {
@@ -125,6 +131,8 @@ class Ctrlr
     void processBtn(btnBehavior& bb, Buttoner& bBtnr, int& pinVal, int& btnTog, int& btnSeq, long& btnTime);
     const btnMode relativeMode(const btnMode& mode, const int relVal);
     void doRepeats(btnBehavior& bb);
+    void storeSeq();
+    void recallSeq();
 
   private:
     // the MIDI channel number to send messages

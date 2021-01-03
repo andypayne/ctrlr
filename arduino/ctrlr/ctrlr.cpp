@@ -302,6 +302,28 @@ void Ctrlr::doRepeats(btnBehavior& bb) {
   }
 }
 
+void Ctrlr::storeSeq() {
+  // Format:
+  // 1) tempo            - _metroBpm
+  // 2) seq lengh        - _numSeq2Steps
+  // 3) notes/velocities - noteSpec _seqSteps[NUM_SEQ2_STEPS]
+  EEPROM.write(EADDR_TEMPO, _metroBpm);
+  EEPROM.write(EADDR_LEN, _numSeq2Steps);
+  for (int i = 0; i < NUM_SEQ2_STEPS; i++) {
+    EEPROM.write(EADDR_SEQ + i, _seqSteps[i].note);
+    EEPROM.write(EADDR_SEQ + i + 1, _seqSteps[i].vel);
+  }
+}
+
+void Ctrlr::recallSeq() {
+  _metroBpm = EEPROM.read(EADDR_TEMPO);
+  _numSeq2Steps = EEPROM.read(EADDR_LEN);
+  for (int i = 0; i < NUM_SEQ2_STEPS; i++) {
+    _seqSteps[i].note = EEPROM.read(EADDR_SEQ + i);
+    _seqSteps[i].vel = EEPROM.read(EADDR_SEQ + i + 1);
+  }
+}
+
 void Ctrlr::update() {
   _renc_sw_val = digitalRead(_inRencSwitch);
   _rencBtnr.setVal(_renc_sw_val);
@@ -479,6 +501,19 @@ void Ctrlr::update() {
   }
   if (_rencBtnr.isReleased()) {
     //Serial.println("_RELEASED_");
+  }
+
+  if (_rencBtnr.isSinglePressed()) {
+    if (_bb0.mode == mnseq2) {
+      if (_editMode == sesto) {
+        storeSeq();
+      } else if (_editMode == serec) {
+        recallSeq();
+        _metro.interval(BPM_TO_MILLIS(_metroBpm));
+        _seqStep = 0;
+        _metro.reset();
+      }
+    }
   }
 
   long new_renc_val = _renc.read();
