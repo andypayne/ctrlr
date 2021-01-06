@@ -4,6 +4,7 @@ A programmable MIDI Controller
 
 ![CTRLR](docs/ctrlr.png)
 
+
 ## Hardware
 
 - [Teensy 4.0](https://www.pjrc.com/store/teensy40.html)
@@ -17,6 +18,21 @@ A programmable MIDI Controller
 
 - [buttoner](https://github.com/andypayne/buttoner)
 - [midi_defs](https://github.com/andypayne/midi_defs)
+
+
+## Pure Data integration
+
+Objects for [Pure Data](https://puredata.info/) are located in [/PureData](/PureData).
+
+
+### ctrlr.pd
+
+![ctrlr.pd](docs/ctrlr_pd_shot.png)
+
+
+### ctrlr_test.pd
+
+![ctrlr_test.pd](docs/ctrlr_test_pd_shot.png)
 
 
 ## Issues
