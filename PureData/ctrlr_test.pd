@@ -1,0 +1,42 @@
+#N canvas 36 23 547 428 10;
+#X floatatom 100 202 5 0 0 0 - - -;
+#X floatatom 368 202 5 0 0 0 - - -;
+#X obj 81 201 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 349 201 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X obj 174 201 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 194 201 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 214 201 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 234 201 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 254 201 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 274 201 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 294 201 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X obj 314 201 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0
+1;
+#X text 79 223 notes;
+#X text 212 223 ctl buttons;
+#X text 353 224 wheel;
+#X obj 175 64 ctrlr;
+#X floatatom 137 202 5 0 0 0 - - -;
+#X text 135 223 velocity;
+#X connect 15 0 2 0;
+#X connect 15 0 0 0;
+#X connect 15 1 16 0;
+#X connect 15 2 4 0;
+#X connect 15 3 5 0;
+#X connect 15 4 6 0;
+#X connect 15 5 7 0;
+#X connect 15 6 8 0;
+#X connect 15 7 9 0;
+#X connect 15 8 10 0;
+#X connect 15 9 11 0;
+#X connect 15 10 3 0;
+#X connect 15 10 1 0;
