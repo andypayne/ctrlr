@@ -13,9 +13,21 @@ A programmable MIDI Controller
 - A rotary encoder
 - 3D-printed enclosure, buttons caps, and rotary wheel
 
+
+### Enclosure
+
+The [enclosure](/enclosure) was designed with [Solvespace](https://solvespace.com/), a parametric 3D CAD tool. The button pads and dial were designed with [OpenSCAD](http://www.openscad.org/).
+
+
+#### Top
+
 ![CTRLR Enclosure Top](docs/ctrlr_top_solvespace.png)
 
+
+#### Bottom
+
 ![CTRLR Enclosure Bottom](docs/ctrlr_bot_solvespace.png)
+
 
 ## Dependencies for the Arduino project
 
