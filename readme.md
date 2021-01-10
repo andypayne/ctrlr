@@ -13,6 +13,9 @@ A programmable MIDI Controller
 - A rotary encoder
 - 3D-printed enclosure, buttons caps, and rotary wheel
 
+![CTRLR Enclosure Top](docs/ctrlr_top_solvespace.png)
+
+![CTRLR Enclosure Bottom](docs/ctrlr_bot_solvespace.png)
 
 ## Dependencies for the Arduino project
 
