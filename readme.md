@@ -50,6 +50,13 @@ Objects for [Pure Data](https://puredata.info/) are located in [/PureData](/Pure
 ![ctrlr_test.pd](docs/ctrlr_test_pd_shot.png)
 
 
+## Operation Modes
+
+### 16-Step Sequencer
+
+![sequencer mode](docs/sequencer_layout.jpg)
+
+
 ## Issues
 
 TODO - elaborate on issues
