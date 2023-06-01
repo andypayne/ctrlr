@@ -39,7 +39,18 @@ Install [Arduino](https://www.arduino.cc/en/software) 2.0+.
 
 Follow [these instructions](https://www.pjrc.com/teensy/td_download.html) to install the Teensyduino add-on. ([board manager url](https://www.pjrc.com/teensy/package_teensy_index.json))
 
+Then to use the Teensy 4.0 board, in the Arduino menu select `Tools -> Board -> Teensy -> Teensy 4.0`.
+
+### Adafruit libraries
+
+To use the SSD1306 display, these libraries need to be installed in Arduino. For newer versions, just search for and install the display type in the Arduino library manager (`"Adafruit SSD1306"` for this project), and the required dependencies (notably Adafruit GFX Library & Adafruit BusIO Library) will be installed with it.
+
+- [Adafruit GFX Graphics Library](https://learn.adafruit.com/adafruit-gfx-graphics-library/overview)
+- [Adafruit SSD1306](https://github.com/adafruit/Adafruit_SSD1306)
+
 ### Project Dependencies
+
+Clone these repositories:
 
 - [buttoner](https://github.com/andypayne/buttoner)
 - [midi_defs](https://github.com/andypayne/midi_defs)
