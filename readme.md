@@ -29,7 +29,17 @@ The [enclosure](/enclosure) was designed with [Solvespace](https://solvespace.co
 ![CTRLR Enclosure Bottom](docs/ctrlr_bot_solvespace.png)
 
 
-## Dependencies for the Arduino project
+## Installation with Arduino
+
+### Arduino
+
+Install [Arduino](https://www.arduino.cc/en/software) 2.0+.
+
+### Teensyduino
+
+Follow [these instructions](https://www.pjrc.com/teensy/td_download.html) to install the Teensyduino add-on. ([board manager url](https://www.pjrc.com/teensy/package_teensy_index.json))
+
+### Project Dependencies
 
 - [buttoner](https://github.com/andypayne/buttoner)
 - [midi_defs](https://github.com/andypayne/midi_defs)
