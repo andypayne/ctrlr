@@ -55,6 +55,10 @@ Clone these repositories:
 - [buttoner](https://github.com/andypayne/buttoner)
 - [midi_defs](https://github.com/andypayne/midi_defs)
 
+### USB MIDI
+
+To enable [MIDI device](https://www.pjrc.com/teensy/td_midi.html) support for the Teensy, select `Tools -> USB Type -> MIDI` in the Arduino menu. Then the project should build successfully. To upload to a board, select the appropriate port.
+
 
 ## Pure Data integration
 
